@@ -168,9 +168,9 @@ WSGI_APPLICATION = "MONSTER_APP.wsgi.application"
 
 #BASE DE DATOS SQL3 POR DEFECTO
 #DATABASES = {
-   # "default": {
-      #  "ENGINE": "django.db.backends.sqlite3",
-      #  "NAME": BASE_DIR / "db.sqlite3",
+    #"default": {
+       # "ENGINE": "django.db.backends.sqlite3",
+       # "NAME": BASE_DIR / "db.sqlite3",
   #}
 #}
 
