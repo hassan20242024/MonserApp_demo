@@ -1,1 +1,2 @@
-web: python manage.py migrate && gunicorn MONSTER_APP.wsgi
+release: python manage.py migrate
+web: gunicorn MONSTER_APP.wsgi
