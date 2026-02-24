@@ -1,0 +1,110 @@
+
+{% extends "partial/body.html" %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% block contenido %}
+{% load django_bootstrap5 %}
+{% load static %}
+{% include "partial/header_mantenimientos.html" %}
+  <!-- Modales. -->
+{% include "secuencias/modales/modal_crear_editar_mantenimientos.html" %}
+
+<section class="content-header" style="margin: 0; padding: 5px 0 0 0;">
+  <div class="container-fluid" style="padding: 0;">
+    <div class="row" style="margin: 0;">
+      <div class="col-sm-6">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contenedor ancho con padding estándar -->
+<div class="container-fluid" style="margin-top: 5px; padding-top: 0 1rem;">
+  <div class="col-md-12" style="margin-top: 0; padding-top: 0;">
+
+    <!-- Botones dentro de row con padding horizontal -->
+    <div class="row mb-2 align-items-center px-3" style="margin-bottom: 0.5rem;">
+      <div class="col-md-6">
+        {% for group in request.user.groups.all %}
+          {% if group.name == 'Administrador' %}
+            <button class="btn btn-primary btn-sm" id="btnCrearLavado" style="background:#07239e98" data-bs-toggle="modal" data-bs-target="#lavadoModal">
+              Registrar Sistema
+            </button>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="col-md-6 text-end">
+        {% for group in request.user.groups.all %}
+          {% if group.name == 'Analista' %}
+            <button type="button" id="btnCrearLavado" class="btn btn-primary btn-sm" style="background:#07239e98" onclick='confirmar(event)'>
+              Actualizar fecha
+            </button>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Tarjeta con tabla -->
+    <div class="card" style="margin-top: 0;">
+      <div class="card-header bg-light px-3" style="padding: 0.5rem 1rem;">
+        <h3 class="card-title mb-0">Fechas Programadas</h3>
+      </div>
+      <div class="card-body table-responsive p-2">
+        <form action="{% url 'mantenimientos_buzos_Check_form' %}" method="POST" id="myModelForm">{% csrf_token %}
+          <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+          <table id="myTable" class="table table-bordered display" style="width: 100%;">
+            <thead>
+              <tr>
+                <th>Sistema</th>
+                <th>Lavado Buzos</th>
+                <th>Lavado Celdas</th>
+                <th>Test Diagnóstico</th>
+                <th>Mantenimiento</th>
+                <th>Calificación</th>
+              
+                <th>Editar</th>
+              
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!--Color Pre-Fecha-Alerta_Inferior Mantenimiento y Calificacion-->
+<style>
+.badge-warning-light {
+    background-color: #fffb93; /* amarillo claro */
+    color: #2b2a0f;
+    font-weight: bold;
+    border-radius: 4px;
+}
+</style>
+
+
+<!-- Alertas de mensaje -->
+<div id="alertaResultado" class="alert d-none mt-3" role="alert"></div>
+
+<!-- ✅ 1. Query primero -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- ✅ 2. DataTables -->
+<script src="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.0.3/datatables.min.js"></script>
+
+<!-- ✅ 3. Inicializar DataTable -->
+<script src="{% static 'js/mantenimientoSistemas/inicializarTabla.js' %}" ></script>
+
+<!-- ✅ 4. Lógica para crear/editar sistemas -->
+<script src="{% static 'js/mantenimientoSistemas/crearEditarSistemas.js' %}" ></script>
+
+<!-- (Opcional) Otros scripts -->
+<script src="{% static 'js/mantenimientoSistemas/registrarMantenimientosRealizaodos.js' %}" ></script>
+
+
+
+{% endblock contenido %}

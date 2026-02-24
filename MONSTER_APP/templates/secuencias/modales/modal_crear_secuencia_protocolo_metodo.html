@@ -1,0 +1,102 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/secuencias/modales/modalCrearSecuenciaProtocoloMetodo.css' %}">
+
+<!-- Modal -->
+<div class="modal fade" id="crearSecuenciaModal" tabindex="-1" aria-labelledby="crearSecuenciaModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+    <div class="modal-content">
+      <form id="myFormCreacionProtocoloMetodo">
+        {% csrf_token %}
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="crearSecuenciaModalLabel">Crear Secuencia</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Campos ocultos -->
+          <input type="text" name="fecha_configuracion_protocolo_metodo" value="0001-01-01" hidden>
+          {% now "Y-m-d G:i:s" as today_str %}
+          <input type="text" name="fecha_configuracion_protocolo_proceso" value="{{ today_str }}" hidden>
+
+          <!-- Nombre y Fecha -->
+          <div class="form-row">
+            <div class="mb-3">
+              <label class="form-label">Nombre</label>
+              <input type="text" autocomplete="off" name="nombre" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Fecha de Inicio</label>
+              <input type="datetime-local" name="fecha_Inicio" class="form-control" required>
+            </div>
+          </div>
+
+          <!-- Sistema y Protocolo -->
+          <div class="form-row">
+            <div class="mb-3">
+              <label class="form-label">Sistema</label>
+              <select name="sistema" id="sistema" required>
+                <option value="">Seleccione...</option>
+                {% for item in sistema %}
+                {% if item.condicion == "Activo"  %}
+                <option value="{{ item.id }}">{{ item }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Protocolo de Método</label>
+              <select name="protocolo" id="protocolo" required>
+                <option value="">Seleccione...</option>
+                {% for item in protocolos %}
+                {% if item.estado_protocolo.id == 1 and item.condicion == "Activo"  %}
+                <option value="{{ item.id }}">{{ item }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <!-- Parámetro -->
+          <div class="mb-3">
+            <label class="form-label">Parámetro</label>
+            <select name="parametro_sq" id="parametro_sq" multiple required>
+              <option value="">Seleccione...</option>
+              <!-- Se cargan dinámicamente -->
+            </select>
+          </div>
+
+          <!-- Observaciones -->
+          <div class="mb-3">
+            <label class="form-label">Observaciones</label>
+            <textarea name="observaciones" class="form-control" rows="3" required></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" id="btnGuardarOActualizarMetodo">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Spinner oculto -->
+<div id="spinner-carga" class="d-none">Cargando...</div>
+
+<!-- TomSelect -->
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+
+<!--Crear Secuencia protocolo Metodo -->
+<script src="{% static 'js/secuencias/modalAcciones/creacionSecuenciaProtocoloMetodo.js' %}" ></script>
+
+<!-- Editar Secuencia protocolo Metodo-->
+<script src="{% static 'js/secuencias/modalAcciones/edicionSecuenciaProtocoloMetodo.js' %}" ></script>
+
+<!--Agregar Parametros Adicionales Secuencia-->
+<script src="{% static 'js/secuencias/modalAcciones/agregarParametrosProtocoloMetodo.js' %}" ></script>
+
+
+
+

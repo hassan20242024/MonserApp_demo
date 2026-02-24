@@ -1,0 +1,111 @@
+
+
+  /* Modal más ancho */
+  #crearSecuenciaModalProceso .modal-dialog {
+    max-width: 1000px; /* Más ancho que modal-lg */
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Modal bordes redondeados y sombra */
+  #crearSecuenciaModalProceso .modal-content {
+    border-radius: 1.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Mantener color del header con bordes redondeados */
+  #crearSecuenciaModalProceso .modal-header {
+    border-top-left-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+  }
+
+  /* Sombra inputs y textarea */
+  #crearSecuenciaModalProceso input.form-control,
+  #crearSecuenciaModalProceso textarea.form-control {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.12);
+    transition: box-shadow 0.3s ease;
+  }
+  #crearSecuenciaModalProceso input.form-control:focus,
+  #crearSecuenciaModalProceso textarea.form-control:focus {
+    box-shadow: 0 0 12px rgba(0, 123, 255, 0.6);
+    outline: none;
+  }
+
+  /* Contenedores en fila */
+  .form-row {
+    display: flex;
+    gap: 1.5rem;
+  }
+  .form-row > .mb-3 {
+    flex: 1;
+    margin-bottom: 1.25rem;
+  }
+
+  /* Botones en bloque y separados, orden invertido */
+  #crearSecuenciaModalProceso .modal-footer {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-bottom: 1rem;
+  }
+  #crearSecuenciaModalProceso .modal-footer button {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+  }
+
+  /* Ajuste padding modal body */
+  #crearSecuenciaModalProceso .modal-body {
+    overflow-y: auto;
+    flex: 1 1 auto;
+    padding: 1.5rem 2rem 1.5rem 2rem;
+  }
+  #crearSecuenciaModalProceso .modal-footer .btn-primary {
+  background-color: #3617a68d;
+  border: none;
+  color: white;
+}
+
+#crearSecuenciaModalProceso .modal-footer .btn-primary:hover {
+  background-color: #4e04618d;
+  box-shadow: 0 5px 12px rgba(111, 66, 193, 0.5);
+}
+
+  .ts-control {
+    font-size: 14px;
+    background-color: #f8f9fa; /* color tipo Bootstrap */
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    min-height: 38px;
+    padding: 6px 12px;
+  }
+
+  .ts-dropdown {
+    background-color: #fefdff;
+    font-size: 14px;
+    border: 1px solid #86a998;
+    border-radius: 0.25rem;
+    box-shadow: 0 4px 8px rgba(142, 151, 232, 0.355);
+  }
+
+  .ts-dropdown .option {
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+
+  .ts-dropdown .option:hover {
+    background-color: #175e98;
+    color: #fff;
+  }
+
+  /* Intenta seleccionar la opción deshabilitada que contiene el texto "Cargando..." */
+.ts-dropdown .option[aria-disabled="true"] {
+  color: #9c00cc !important;      /* púrpura fuerte */
+  font-weight: 900 !important;    /* máximo grosor de fuente */
+}
+
+
+
+

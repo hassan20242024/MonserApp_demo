@@ -1,0 +1,361 @@
+
+{% extends "partial/body.html" %}
+{% block stylesheet %}
+{% endblock stylesheet %}
+{% load static %}
+{% block contenido %}
+{% include "partial/loadingPaginas.html" %}
+
+<!-- Input Material   -->
+<script src="https://unpkg.com/gijgo@1.9.14/js/gijgo.min.js" type="text/javascript"></script>
+<link href="https://unpkg.com/gijgo@1.9.14/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+<!-- Input Material -->
+<!-- Data-table-->
+<!-- Data-table-->
+
+<div id="contenido-cargado" class="d-none">
+  <div class="container-fluid px-3 pt-4">
+     <div class="pagetitle d-flex justify-content-between align-items-center mt-0 mb-3"> 
+       <h4 class="mb-0">Gestión de Protocolos de Métodos</h4>
+       
+<a id="btn-nuevo-protocolo" href="{% url 'crear_protocolo_metodos' %}"
+   class="btn btn-primary hidden-role"
+   style="background:#4316708e; border: none; border-radius: 50px; font-size: 14px; padding: 6px 16px;">
+  <span class="fa fa-plus-circle"></span> Nuevo Protocolo
+</a>
+
+
+</div>
+  <div class="card my-4">
+    <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-6"> <br>
+            <div class="text-right">
+              <div class="text-right">
+            </div>
+          </div>
+              </div>
+              <div class="col-md-6">
+                <br>
+                  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                   </div>
+          </div>
+          </div>
+    </div>
+    
+      <div class="card-body table-responsive">
+        <table id="example3" class="display" style="width:100%">
+          <thead class="">
+            <tr>
+          
+            <th style="width: 20%">
+            Código del Protocolo
+            </th>
+            <th style="width: 35%">
+            Nombre
+            </th>
+              <th style="width: 8%" class="text-left">
+            Estado
+            </th>
+            
+            <th class="text-center">
+              Opciones
+            </th>
+             <th class="d-none">Detalles</th> 
+            </tr>
+            </thead>
+            <tbody id="myTable">
+            </tbody>
+    
+    
+        </table>
+        <link href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.0.3/b-3.0.1/b-html5-3.0.1/date-1.5.2/sl-2.0.0/datatables.min.css" rel="stylesheet">
+ 
+        <script src="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.0.3/b-3.0.1/b-html5-3.0.1/date-1.5.2/sl-2.0.0/datatables.min.js"></script>
+        
+        </div>
+      </div>
+    </div>
+</div>    
+<style>
+
+  .rotate-icon {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+  }
+  .bg-light {
+    background-color: #f8f9fa !important;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const spinner = document.getElementById('spinner-carga');
+  const contenido = document.getElementById('contenido-cargado');
+  const tbody = document.getElementById('myTable');
+
+   const urlParams = new URLSearchParams(window.location.search);
+  const skipSpinner = urlParams.get('skipSpinner') === '1';
+
+  if (!skipSpinner) {
+    spinner.classList.remove('d-none');
+    contenido.classList.add('d-none');
+  } else {
+    // Mostrar directamente el contenido si venimos de redirección
+    spinner.classList.add('d-none');
+    contenido.classList.remove('d-none');
+  }
+
+fetch("{% url 'protocolo_metodos_json' %}")
+  .then(response => response.json())
+  .then(data => {
+    const table = new DataTable('#example3', {
+      data: data,
+      columns: [
+        {
+          data: null,
+          render: function (p) {
+            return `
+              <a>${p.codigo}</a><br>
+              <small>Fecha de estado actual: ${p.fecha_final}</small>
+            `;
+          }
+        },
+        {
+          data: 'nombre'
+        },
+        {
+          data: null,
+          render: function (p) {
+            let entregaHTML = '';
+            if (p.estado_protocolo?.nombre.toLowerCase().includes("finalizado") && p.fecha_de_entrega) {
+              entregaHTML = `<br><small class="text-muted">Entregado el ${p.fecha_de_entrega}</small>`;
+            }
+            return `${getEstadoBadge(p.estado_protocolo?.id, p.estado_protocolo?.nombre)} ${entregaHTML}`;
+          }
+        },
+        {
+          data: null,
+          orderable: false,
+          render: function (p, type, row, meta) {
+            let entregadoAHTML = '';
+            if (p.estado_protocolo?.nombre.toLowerCase().includes("finalizado") && p.fecha_de_entrega) {
+              entregadoAHTML = `<strong>Entregado a:</strong> ${p.entregado_a || ''}`;
+            }
+
+            // Guardar los detalles en un atributo para usarlos luego
+            const detalle = `
+              <strong>Cliente:</strong> ${p.cliente || ''}<br>
+              <strong>Celda:</strong> ${p.celda?.nombre || ''} (${p.celda?.responsable || ''})<br>
+              <strong>Método:</strong> ${p.metodo?.código || ''} - ${p.metodo?.nombre || ''}<br>
+              <strong>Observaciones:</strong> ${p.observaciones || ''}<br>
+              ${entregadoAHTML || ''}
+            `;
+
+            return `
+              <div class="d-flex justify-content-center flex-wrap gap-2">
+                <button class="btn btn-outline-secondary text-center btn-sm toggle-details" data-detalle="${encodeURIComponent(detalle)}">
+                <i class="fas fa-chevron-down me-1 toggle-icon"></i>Expandir
+              </button>
+              <a class="btn btn-primary btn-sm text-center" href="/revisar_protocolo_metodos/${p.id}">
+                <i class="fas fa-folder"></i> Revisar
+              </a>
+              ${isAdmin() ? `
+              <a class="btn btn-info btn-sm text-center btn-editar-protocolo" href="/editar_protocolo_metodos/${p.id}">
+                <i class="fas fa-pencil-alt"></i> Editar
+              </a>` : ''}
+                </div>
+            `;
+          }
+        },
+        {
+          data: null,
+          visible: false,
+          render: function (p) {
+            return [
+              p.cliente,
+              p.celda?.nombre,
+              p.celda?.responsable,
+              p.metodo?.código,
+              p.metodo?.nombre,
+              p.observaciones,
+              p.entregado_a
+            ].join(' ').toLowerCase();
+          }
+        }
+      ],
+      searching: true,
+      paging: true,
+      lengthChange: true,
+      info: true,
+      autoWidth: false,
+      responsive: true, // ¡Ahora puedes dejar esto activo!
+      createdRow: function (row, data, dataIndex) {
+        // Nada especial aquí, podrías marcar fila si lo necesitas
+      }
+    });
+
+    // Delegación de eventos para expansión
+$('#example3 tbody').on('click', '.toggle-details', function () {
+  const tr = $(this).closest('tr');
+  const row = table.row(tr);
+  const icon = $(this).find('i');
+
+  if (row.child.isShown()) {
+    row.child.hide();
+    tr.removeClass('shown');
+    icon.removeClass('rotate-icon');
+    $(this).contents().last().replaceWith(' Expandir');
+  } else {
+    const detalleHTML = decodeURIComponent($(this).data('detalle'));
+    row.child(`<div class="bg-light p-3">${detalleHTML}</div>`).show();
+    tr.addClass('shown');
+    icon.addClass('rotate-icon');
+    $(this).contents().last().replaceWith(' Ocultar');
+  }
+});
+
+    spinner.classList.add('d-none');
+    contenido.classList.remove('d-none');
+  })
+  .catch(error => {
+    console.error("Error al cargar los datos:", error);
+    spinner.innerHTML = `<p class="text-danger">Error al cargar los datos.</p>`;
+  });
+
+  function getEstadoBadge(id, nombre) {
+    if (id === 5) return `<span class="badge badge-secondary">${nombre}</span>`;
+    if (id === 6) return `<span class="badge badge-info">${nombre}</span>`;
+    if ([2, 3, 4].includes(id)) return `<span class="badge bg-gradient-warning text-body">${nombre}</span>`;
+    if (id === 1) return `<span class="badge badge-success">${nombre}</span>`;
+    return nombre;
+  }
+
+  function isAdmin() {
+    return "{{ is_admin|yesno:'true,false' }}" === "true";
+  }
+});
+
+//Mensaje de exito cuando se redirige desde el formulario
+ const mensaje = sessionStorage.getItem('protocoloSuccess');
+  if (mensaje) {
+    Swal.fire({
+      icon: 'success',
+      title: 'Éxito',
+      text: mensaje,
+      timer: 2500,
+      showConfirmButton: false
+    });
+    sessionStorage.removeItem('protocoloSuccess');
+  }
+</script>
+
+  <script>
+    $(document).ready(function(){
+      $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+    </script>
+
+    <link href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.0.3/b-3.0.1/b-html5-3.0.1/date-1.5.2/sl-2.0.0/datatables.min.css" rel="stylesheet">
+
+    <!-- Datatable-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ 
+    <script src="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.0.3/b-3.0.1/b-html5-3.0.1/date-1.5.2/sl-2.0.0/datatables.min.js"></script>
+    
+    <!-- Datatable-->
+
+    <!-- Estilos para barra de progreso-->
+    <style type="">
+      .container {
+        margin: 100px auto;
+        width: 500px;
+        text-align: center;
+      }
+      
+      .progress {
+        padding: 3px;
+        background: rgba(0, 0, 0, 0.25);
+        border-radius: 6px;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
+      }
+      
+      .progress-bar-5 {	
+        height: 18px;
+        background-color: #ee303c;  
+        border-radius: 4px; 
+        transition: 0.2s linear;  
+        transition-property: width, background-color; 
+        animation: progressAnimationStrike5 3s;
+      }
+      @keyframes progressAnimationStrike5 {
+           from { width: 0 }
+           to   { width: 8% }
+      }
+      .progress-bar-25 {	
+        height: 18px;
+        background-color: #ee303c;  
+        border-radius: 4px; 
+        transition: 0.4s linear;  
+        transition-property: width, background-color; 
+        animation: progressAnimationStrike25 3s;
+      }
+      @keyframes progressAnimationStrike25 {
+           from { width: 0 }
+           to   { width: 25% }
+      }
+      .progress-bar-50 {	
+        height: 18px;
+        background-color: #ee303c;  
+        border-radius: 4px; 
+        transition: 0.4s linear;  
+        transition-property: width, background-color; 
+        animation: progressAnimationStrike50 3s;
+      }
+      @keyframes progressAnimationStrike50 {
+           from { width: 0 }
+           to   { width: 50% }
+      }
+      .progress-bar-75 {	
+        height: 18px;
+        background-color: #ee303c;  
+        border-radius: 4px; 
+        transition: 0.4s linear;  
+        transition-property: width, background-color; 
+        animation: progressAnimationStrike75 3s;
+      }
+      @keyframes progressAnimationStrike75 {
+           from { width: 0 }
+           to   { width:75% }
+      }
+      .progress-bar-100 {	
+        height: 18px;
+        background-color: #ee303c;  
+        border-radius: 4px; 
+        transition: 0.4s linear;  
+        transition-property: width, background-color; 
+        animation: progressAnimationStrike100 3s;
+      }
+      @keyframes progressAnimationStrike100 {
+           from { width: 0 }
+           to   { width: 100% }
+      }
+      
+      </style>
+    <!-- Estilos para barra de progreso-->
+
+  <!-- Mostrar Swal alert mientrar redirige el formulario-->
+<script src="{% static 'js/protocoloMetodos/swalEsperarRespuesta.js' %}" > </script>
+
+
+
+
+{% endblock contenido %}
+
+
+

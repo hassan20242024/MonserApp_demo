@@ -1,0 +1,59 @@
+{% extends "partial/body.html" %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% block contenido1 %}
+{% include "definir_estado.html" %}
+{% load django_bootstrap5 %}
+
+<div class="row">
+  <div class="col-md-6">
+      <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">Estado</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" 
+               aria-haspopup="true" aria-expanded="false">Parametros</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">Parametro</a>
+              <a class="dropdown-item" href="#">Sub-parámetro</a>
+              <a class="dropdown-item" href="#">Título Parámetro</a>
+              
+            </div>
+          </li>
+          <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" 
+                 aria-haspopup="true" aria-expanded="false">Dropdown</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">asas</a>
+                <a class="dropdown-item" href="#">sss action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Separated link</a>
+              </div>
+            </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">Disabled</a>
+          </li>
+        </ul>
+      
+  </div>
+  <div class="col-md-6">
+      <div class="text-right">
+          <div class="input-group rounded">
+              <input type="search" class="form-control rounded" placeholder="Buscar" aria-label="Search" aria-describedby="search-addon" />
+              <span class="input-group-text border-0" id="search-addon">
+                <i class="fas fa-search"></i>
+              </span>
+            </div>
+
+      </div>
+      
+  </div>
+
+</div>
+
+{% endblock contenido1 %}

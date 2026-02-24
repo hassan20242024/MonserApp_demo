@@ -1,0 +1,30 @@
+{% extends "partial/body.html" %}
+{% block javascript %}
+<!-- Mensajes -->
+{% for message in messages %}
+{% if message.tags == 'success' %}
+
+  <script>
+    var m = "{{ message }}";
+    Swal.fire({
+title: "Acción exitosa!",
+text: m,
+icon: "success"
+});
+  </script>
+{% else %}
+<!-- sweetalert js -->
+
+<script>
+  var m = "{{ message }}";
+  Swal.fire({
+icon: "error",
+title: "Oops...",
+text: m,
+});
+</script>
+{% endif %}
+{% endfor %}
+ <!--Mensajes-->
+
+{% endblock javascript %}

@@ -1,0 +1,104 @@
+<!-- SPINNER CARGAR GLOBAL-->
+ <div id="spinner-carga" class="d-none text-center my-3">
+  <div class="atom-spinner" id="spinner">
+  <div class="spinner-inner">
+    <div class="orbit orbit1"></div>
+    <div class="orbit orbit2"></div>
+    <div class="orbit orbit3"></div>
+    <div class="spinner-center">
+      <img class="spinner-logo" src="/static/dist/img/logo.png" alt="Logo" />
+    </div>
+  </div>
+</div>
+ 
+</div>
+<style>
+  #spinner-carga {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+ background-color: rgba(255, 255, 255, 0); /* completamente transparente */
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+:root {
+    --spinner-size: 416px;         /* 320px + 30% = 416px */
+    --orbit-color: #3e5bbc;
+    --orbit-width: 13px;           /* 10px + 30% = 13px */
+    --logo-size: 117px;            /* 90px + 30% = 117px */
+  }
+
+  .atom-spinner {
+    width: var(--spinner-size);
+    height: var(--spinner-size);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+  }
+
+  .spinner-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    perspective: 1000px;
+  }
+
+  .orbit {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border-left: var(--orbit-width) solid var(--orbit-color);
+    border-top: var(--orbit-width) solid transparent;
+    opacity: 0.8;
+  }
+
+  .orbit1 {
+    transform: rotateZ(0deg) rotateX(66deg);
+    animation: spinOrbit1 4s linear infinite;
+  }
+
+  .orbit2 {
+    transform: rotateZ(120deg) rotateX(66deg);
+    animation: spinOrbit2 4s linear infinite;
+  }
+
+  .orbit3 {
+    transform: rotateZ(240deg) rotateX(66deg);
+    animation: spinOrbit3 4s linear infinite;
+  }
+
+  @keyframes spinOrbit1 {
+    to { transform: rotateZ(0deg) rotateX(66deg) rotateZ(360deg); }
+  }
+
+  @keyframes spinOrbit2 {
+    to { transform: rotateZ(120deg) rotateX(66deg) rotateZ(360deg); }
+  }
+
+  @keyframes spinOrbit3 {
+    to { transform: rotateZ(240deg) rotateX(66deg) rotateZ(360deg); }
+  }
+
+  .spinner-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .spinner-logo {
+    width: var(--logo-size);
+    height: var(--logo-size);
+    object-fit: contain;
+    filter: drop-shadow(0 0 6px rgba(52, 152, 219, 0.4));
+  }
+
+</style>

@@ -1,0 +1,148 @@
+  
+    #table tbody tr:nth-child(odd) {
+      background-color: #f9f4ff;
+    }
+
+    #table tbody tr:hover {
+      background-color: #dbe3ee;
+    }
+
+    .loading-text {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font: 300 clamp(2em, 10vw, 6em) Poppins, sans-serif;
+      color: #00c6ff;
+      animation: shimmer 2s linear infinite;
+    }
+
+    @keyframes shimmer {
+      100% {
+        background-position: 100%;
+      }
+    }
+
+
+  .detalle-row td {
+    background-color: #f0f4f8;
+  }
+
+  .muestra-resumen {
+    cursor: pointer;
+  }
+
+  .muestra-resumen:hover {
+    text-decoration: underline;
+  }
+
+
+  .muestra-resumen {
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .muestra-resumen:hover {
+    background-color: #f5f5f5;
+    border-radius: 4px;
+  }
+
+  .toggle-icon {
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+  }
+
+  .toggle-icon.rotated {
+    transform: rotate(180deg);
+  }
+
+  .detalle-row td {
+    background-color: #eef3f8;
+    font-size: 0.85rem;
+  }
+
+
+
+  .estado-check {
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1rem;
+}
+
+.estado-check input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+}
+
+/* Aplicamos el mismo color al check usando accent-color */
+.text-warning input[type="checkbox"] {
+  accent-color: #ffc107;
+}
+
+.text-success input[type="checkbox"] {
+  accent-color: #198754;
+}
+
+.text-primary input[type="checkbox"] {
+  accent-color: #0d6efd;
+}
+
+
+  /* Azul oscuro más sobrio para el header del modal */
+.modal-header.bg-primary {
+  background-color: #415671f7 !important;
+  color: rgb(238, 242, 246) !important;
+  transition: background-color 0.4s ease; /* transición de 0.4 segundos */
+}
+
+  @keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal.show .animar-seccion {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.modal.show .animar-seccion:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.modal.show .animar-seccion:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+
+  .muestra-resumen {
+    cursor: pointer;
+  }
+
+  .muestra-resumen:hover {
+    background-color: #f1f1f1;
+    border-radius: 5px;
+  }
+
+  .detalle-row td {
+    background-color: #f0f4f8;
+  }
+
+  .toggle-icon {
+    transition: transform 0.3s ease;
+  }
+
+  .toggle-icon.rotated {
+    transform: rotate(180deg);
+  }
+
+
+
+

@@ -1,0 +1,280 @@
+{% extends "partial/body.html" %}
+
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% load django_bootstrap5 %}
+{% load static %}
+{% block contenido %}
+{% include "partial/loadingPaginas.html" %}
+{% include "partial/header_gestion_secuencias.html" %}
+
+<script src="{% static 'js/highcharts/12.3.0/highcharts.js' %}"></script>
+<script src="{% static 'js/highcharts/12.3.0/modules/data.js' %}"></script>
+<script src="{% static 'js/highcharts/12.3.0/modules/exporting.js' %}"></script>
+<script src="{% static 'js/highcharts/12.3.0/modules/accessibility.js' %}"></script>
+
+
+<div id="contenido-cargado" class="d-none"> 
+    <div class="container-fluid">
+            <div class="card crm-widget" style="background-color: rgba(213, 220, 219, 0.734);">
+        <div class="card-body p-0">
+            <div class="row row-cols-xxl-6 row-cols-md-3 row-cols-1 g-0">
+                <div class="card">
+                    <div class="py-4 px-3">
+                        <h5 class="text-warning text-muted text-uppercase fs-8">Adquiriendo</h5>
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 ms-3">
+                                <h2 class="mb-0 cfs-22"><span data-target="pendientes_validaciones">{{ pendientes_validaciones }}</span></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="py-4 px-3">
+                        <h5 class="text-warning text-muted text-uppercase fs-8">Impresiones pendientes</h5>
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i class="ri-exchange-dollar-line display-6 text-muted cfs-22"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h2 class="mb-0 cfs-22"><span data-target="pendientes_impresiones">{{ pendientes_impresiones }}</span></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="mt-3 mt-md-0 py-4 px-3">
+                        <h5 class="text-success text-muted text-uppercase fs-13">
+                            Reportes pendientes
+                            <i class="ri-arrow-down-circle-line text-danger fs-18 float-end align-middle"></i>
+                        </h5>
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i class="ri-pulse-line display-6 text-muted cfs-22"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h2 class="mb-0 cfs-22"><span class="counter-value" data-target="pendientes_reportes">{{ pendientes_reportes }}</span></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="mt-3 mt-lg-0 py-4 px-3">
+                        <h5 class="text-danger text-muted text-uppercase fs-13">
+                            Inválidas
+                            <i class="ri-arrow-up-circle-line text-success fs-18 float-end align-middle"></i>
+                        </h5>
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i class="ri-trophy-line display-6 text-muted cfs-22"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h2 class="mb-0 cfs-22"><span class="counter-value" data-target="invalidas">{{ invalidas }}</span></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="mt-3 mt-lg-0 py-4 px-3">
+                        <h5 class="text-danger text-muted text-uppercase fs-13">
+                            Ensayos
+                            <i class="ri-arrow-up-circle-line text-success fs-18 float-end align-middle"></i>
+                        </h5>
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i class="ri-trophy-line display-6 text-muted cfs-22"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h2 class="mb-0 cfs-22"><span class="counter-value" data-target="ensayos">{{ ensayos }}</span></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="mt-3 mt-lg-0 py-4 px-3">
+                        <h5 class="text-primary text-uppercase fs-13">
+                            Total registradas
+                            <i class="ri-arrow-down-circle-line text-danger fs-18 float-end align-middle"></i>
+                        </h5>
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i class="ri-service-line display-6 text-muted cfs-22"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h2 class="mb-0 cfs-22"><span class="counter-value" data-target="registro_total">{{ registro_total }}</span></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-gradient-primary">
+                    <h1 class="card-title fs-5">Secuencias totales pendientes según estado</h1>
+                </div>
+                <div id="containersA"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-gradient-primary">
+                    <h1 class="card-title fs-5">Estado general de secuencias</h1>
+                </div>
+                <div id="containers"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-gradient-primary">
+                    <h1 class="card-title fs-5">Estado de sistemas</h1>
+                </div>
+                <div class="card-body" id="container"></div>
+            </div>
+        </div>
+    </div>
+
+    </div>   
+</div>
+
+<style>
+.mt-btn {
+    transition: ease-in 0.4s;
+}
+</style>
+<style>
+.card.crm-widget .card {
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: linear-gradient(135deg, #f0f4ff, #e4e2fa);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card.crm-widget .card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+}
+
+.card.crm-widget h5 {
+  font-weight: 700;
+  color: #555;
+  letter-spacing: 0.05em;
+}
+
+.card.crm-widget h2 {
+  font-weight: 700;
+  font-size: 2rem;
+  color: #222;
+}
+
+.card.crm-widget .flex-shrink-0 i {
+  font-size: 3rem;
+  color: #e06cd6;
+  margin-bottom: 10px;
+}
+
+.card.crm-widget .py-4 {
+  padding-top: 1.5rem !important;
+  padding-bottom: 1.5rem !important;
+}
+
+.card.crm-widget .px-3 {
+  padding-left: 1.5rem !important;
+  padding-right: 1.5rem !important;
+}
+</style>
+<script>
+    
+function animateCount(el, endValue, duration = 1500) {
+  return new Promise(resolve => {
+    let startValue = 0;
+    let startTime = null;
+
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      const progress = timestamp - startTime;
+      const current = Math.min(
+        Math.floor((progress / duration) * endValue),
+        endValue
+      );
+      el.innerText = current.toLocaleString();
+      if (progress < duration) {
+        window.requestAnimationFrame(step);
+      } else {
+        el.innerText = endValue.toLocaleString();
+        resolve();
+      }
+    }
+
+    window.requestAnimationFrame(step);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Mostrar spinner y ocultar contenido al principio
+  document.getElementById("spinner-carga").classList.remove("d-none");
+  document.getElementById("contenido-cargado").classList.add("d-none");
+
+  fetch("{% url 'chart-data-json' %}")
+    .then(response => {
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return response.json();
+    })
+    .then(data => {
+      // Actualizar números SIN animación aún
+      document.querySelectorAll("[data-target]").forEach(el => {
+        const key = el.getAttribute("data-target");
+        if (data[key] !== undefined) {
+          el.innerText = data[key].toLocaleString();
+        }
+      });
+
+      // Renderizar gráficos
+      if (typeof Highcharts !== "undefined") {
+        Highcharts.chart('container', data.chart);
+        Highcharts.chart('containersA', data.chart1A);
+        Highcharts.chart('containers', data.chart1);
+      } else {
+        console.error("Highcharts no está disponible");
+      }
+
+      return data;
+    })
+    .then(data => {
+      // Ocultar spinner y mostrar contenido
+      document.getElementById("spinner-carga").classList.add("d-none");
+      document.getElementById("contenido-cargado").classList.remove("d-none");
+
+      // Animar contadores ahora que contenido está visible
+      const counters = [];
+      document.querySelectorAll("[data-target]").forEach(el => {
+        const key = el.getAttribute("data-target");
+        if (data[key] !== undefined) {
+          counters.push(animateCount(el, data[key], 1500));
+        }
+      });
+      return Promise.all(counters);
+    })
+    .catch(err => {
+      console.error("Error cargando datos:", err);
+      document.getElementById("spinner-carga").innerHTML =
+        `<p class='text-danger fw-bold'>Error al cargar los datos.</p>`;
+      // Asegurar mostrar contenido aunque haya error
+      document.getElementById("spinner-carga").classList.add("d-none");
+      document.getElementById("contenido-cargado").classList.remove("d-none");
+    });
+});
+
+</script>
+
+
+{% endblock %}

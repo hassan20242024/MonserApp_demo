@@ -1,0 +1,149 @@
+
+{% extends "partial/body.html" %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% block contenido %}
+{% load django_bootstrap5 %}
+{% include "partial/header_configuracion_protocolo_metodos.html" %}
+
+ <!-- INICIO Cuerpo -->
+        <div class="container-fluid">
+        <div class="card">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-6">
+                <br>
+                       <div class="text-right">
+            <div class="input-group rounded">
+                <input type="search" id="myInput" class="numberinput gj-textbox-md" placeholder="Buscar..." aria-label="Search" aria-describedby="search-addon" />
+               
+              </div>
+        </div>
+                  </div>
+                  <div class="col-md-6">
+                    <br>
+                      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button class="btn btn-primary" style="background:#486af3c7" data-bs-toggle="modal" data-bs-target="#crear_parametros"><span class="fa fa-plus-circle"></span>Nuevo Sistema</button>
+
+
+                        </div>
+              </div>
+              </div>
+          </div><br>
+            <div class="card-body table-responsive">
+              <table class="table  table-bordered display" id="example3">
+                <thead class="">
+                    <tr class="text-center">
+                        <th class="text-center">Id</th>
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">Estado</th>
+                        <th class="all text-center" >Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="myTable">
+                    {% for item in sistemas.all %}
+                    <tr class="text-center">
+                        <td class="text-center">{{item.id}}</td>
+                        <td class="text-center">{{item.nombre}}</td>
+                        <td class="text-center">
+                           {% if item.condicion == "Activo" %}
+                               Operativo
+                             {% else %}
+                               Fuera de Servicio
+                           {% endif %}
+                       </td>
+                        <td>
+                            <a href="{% url 'editar_parametro' item.pk %}" class="btn btn-primary btn-circle text-center" data-bs-target="#modal_parametros_{{ item.pk }}" data-bs-toggle="modal"><span class="fa fa-edit"></span>Editar</a>
+                        </td>
+                    </tr>
+                    <!-- Formulario-Edicion Modal Inicio -->
+<div class="modal fade" id="modal_parametros_{{ item.pk }}" tabindex="-1" aria-labelledby="modal_parametros" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="ModalLabel">Editar Sistemas</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="{% url 'editar_sistemas' item.pk %}" method="POST"> {% csrf_token %}
+                <div class="mb-3">
+                  <label class="form-label" for="id_nombre">Nombre del Sistema</label>
+                  <input type="text" name="nombre" value="{{item.nombre}}" maxlength="90" class="form-control" placeholder="Nombre Sistema" title="" required="" id="id_nombre">
+                </div>
+                <div class="mb-3">
+  <label class="form-label" for="id_condicion">Disponibilidad</label>
+  <select name="condicion" id="id_condicion" class="form-control" required>
+    <option value="Activo" {% if item.condicion == "Activo" %}selected{% endif %}>Operativo</option>
+    <option value="Pasivo" {% if item.condicion == "Pasivo" %}selected{% endif %}>Fuera de Servicio</option>
+  </select>
+</div>
+
+                <div class="mb-3">
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-block" data-bs-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary btn-block">Guardar cambios</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  {% endfor%}
+  <!-- Formulario Edicion Modal Final -->
+</tbody>
+</table>
+                </div>
+</div>
+</div>
+      <!-- Formulario-Creación Modal Inicio-->
+  <div class="modal fade" id="crear_parametros" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="ModalLabel">Agregar Sistema</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'sistemas' %}" method="POST"> {% csrf_token %}
+             <div class="mb-3">
+                  <label class="form-label" for="id_nombre">Nombre del Sistema</label>
+                  <input type="text" name="nombre" value="{{item.nombre}}" maxlength="90" class="form-control" placeholder="Nombre Sistema" title="" required="" id="id_nombre">
+                </div>
+                <div class="mb-3">
+  <label class="form-label" for="id_condicion">Disponibilidad</label>
+  <select name="condicion" id="id_condicion" class="form-control" required>
+    <option value="Activo" {% if item.condicion == "Activo" %}selected{% endif %}>Operativo</option>
+    <option value="Pasivo" {% if item.condicion == "Pasivo" %}selected{% endif %}>Fuera de Servicio</option>
+  </select>
+</div>
+
+                <div class="mb-3">
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-block" data-bs-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+              </div>
+        </div>
+    </form>
+      </div>
+    </div>
+  </div>
+  <!-- Formulario Creación Modal final -->
+  <!--Data-table-->
+  <script>
+    new DataTable('#example3', {
+     searching:false,
+     "bPaginate": false,
+ "bLengthChange": true,
+ "bFilter": false,
+ "bInfo": false,
+ "bAutoWidth": true,
+ "striped": false,
+    });
+ </script>
+  <!--Data-table-->
+{% endblock contenido %}
+
+
+
+
+
+

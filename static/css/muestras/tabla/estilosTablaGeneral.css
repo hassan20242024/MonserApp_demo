@@ -1,0 +1,31 @@
+
+
+  /* Centrar todos los th y td excepto la columna de detalles (columna 0) */
+  #example3 th:not(:first-child),
+  #example3 td:not(:first-child) {
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  /* Alinea la columna de detalles a la izquierda o centro según prefieras */
+  #example3 td.details-control {
+    text-align: left; 
+    vertical-align: middle;
+  }
+
+  td.details-control {
+    background: url("https://www.datatables.net/examples/resources/details_open.png") no-repeat center center;
+    cursor: pointer;
+  }
+  tr.shown td.details-control {
+    background: url("https://www.datatables.net/examples/resources/details_close.png") no-repeat center center;
+  }
+  
+
+  @media (max-width: 768px) {
+    #example3 th, #example3 td {
+      white-space: nowrap;
+      font-size: 0.85rem;
+    }
+  }
+

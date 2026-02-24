@@ -1,0 +1,81 @@
+{% extends "partial/body.html" %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% block contenido %}
+{% load django_bootstrap5 %}
+{% load static %}
+{% include "partial/header_mantenimientos.html" %}
+<section >
+  
+  <div class="container"><br>
+    <div class="card">
+      <div class="container-fluid">
+      <!-- /.card-header -->
+          <div class="row">
+            <div class="col-md-6"> <br>
+              <div class="text-right">
+                <div class="text-right">
+              </div>
+      
+            </div>
+                </div>
+                  <br>
+            </div>
+      </div>
+        <div class="card-body table-responsive">
+          <table id="example3" class="display" style="width:100%">
+            <thead class="">
+              <tr>
+                  <th class="text-center">ID</th>
+                  <th class="text-center">Sistema</th>
+                  <th class="text-center">Fecha de Lavado de buzos</th>
+                  <th class="text-center">Realizado por</th>
+              </tr>
+              </thead>
+              <tbody id="myTable">
+                  {% for item in lavado_buzo.all %}
+                  {% if item.status == "Realizado" %}
+  <tr>
+              <td class="text-center">{{item.id}}</td>
+              <td class="text-center">{{item.sistema}}</td>
+              <td class="text-center">{{item.fecha_lavado_buzo|date:'Y-m-d'}}</td>
+              <td class="text-center">{{item.realizado_por}}</td>
+              </tr>
+               {% endif %}
+              {% endfor %}
+              </tbody>
+          </table>
+          <link href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.0.3/b-3.0.1/b-html5-3.0.1/date-1.5.2/sl-2.0.0/datatables.min.css" rel="stylesheet">
+   
+          <script src="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.0.3/b-3.0.1/b-html5-3.0.1/date-1.5.2/sl-2.0.0/datatables.min.js"></script>
+          </div>
+        </div>
+      </div>
+
+</section>
+
+        <link href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.0.3/b-3.0.1/b-html5-3.0.1/date-1.5.2/sl-2.0.0/datatables.min.css" rel="stylesheet">
+
+        <script>
+           new DataTable('#example3', {
+            searching:true,
+            "bPaginate": true,
+        "bLengthChange": true,
+        "bFilter": false,
+        "bInfo": false,
+        "bAutoWidth": true,
+        "striped": false,
+           });
+        </script>
+        <!-- Datatable-->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+     
+        <script src="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.0.3/b-3.0.1/b-html5-3.0.1/date-1.5.2/sl-2.0.0/datatables.min.js"></script>
+        
+        <!-- Datatable-->
+    
+
+
+
+    
+{% endblock contenido %}

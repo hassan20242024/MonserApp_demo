@@ -1,0 +1,123 @@
+
+<div class="container-fluid">
+    
+    <div class="pagetitle"><br>
+      <h4 class="">Gestión de Secuencias</h4>
+    </div>
+    <div class="">
+<ul class="nav nav-tabs nav-tabs-gradient">
+
+    <li>
+        <a href="{% url 'registro_inicial_de_secuencias' %}" 
+           class="btn nav-link {% if request.resolver_match.url_name == 'registro_inicial_de_secuencias' %}active{% endif %}">
+           Registro inicial
+        </a>
+    </li>
+
+    <li>
+        <a href="{% url 'proceso_secuencias_en_curso' %}" 
+           class="btn nav-link {% if request.resolver_match.url_name == 'proceso_secuencias_en_curso' %}active{% endif %}">
+           Secuencias
+        </a>
+    </li>
+
+<li class="nav-item dropdown">
+    <a class="btn nav-link dropdown-toggle text-dark {% if request.resolver_match.url_name == 'secuencias_invalidadas' %}active{% endif %}" 
+       data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+       {% if request.resolver_match.url_name == 'secuencias_invalidadas' %}
+           Secuencias Inválidas
+       {% else %}
+           General
+       {% endif %}
+    </a>
+    <div class="dropdown-menu">
+        <a class="dropdown-item {% if request.resolver_match.url_name == 'secuencias_invalidadas' %}active{% endif %}" 
+           href="{% url 'secuencias_invalidadas' %}">
+           Secuencias Inválidas
+        </a>
+    </div>
+</li>
+</ul>
+    </div>
+  </div>
+
+   <!--Script para barra de búsqueda-->
+   <script>
+    $(document).ready(function(){
+      $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+    </script>
+    <!--Script para barra de búsqueda-->
+
+      <!-- Datatable-->
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ 
+      <script src="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.0.3/b-3.0.1/b-html5-3.0.1/date-1.5.2/sl-2.0.0/datatables.min.js"></script>
+      
+      <!-- Datatable-->
+      <link href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.0.3/b-3.0.1/b-html5-3.0.1/date-1.5.2/sl-2.0.0/datatables.min.css" rel="stylesheet">
+  
+
+
+<style>
+/* ::before para todos los nav-links */
+.nav-tabs .nav-link::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: #922ed469;
+  opacity: 0.2;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+  z-index: -1;
+}
+
+/* Al hacer hover en cualquier nav-link */
+.nav-tabs .nav-link:hover::before {
+  width: 120%;
+  height: 120%;
+}
+
+/* El resto de estilos que ya tienes */
+
+.nav-tabs .nav-link {
+  color: #000 !important; /* Negro para inactivos */
+  transition: all 0.3s ease;
+  position: relative; /* necesario para posicionar ::before */
+}
+
+.nav-tabs .nav-link.active {
+  color: #c441f0 !important; /* Púrpura personalizado */
+  background-color: rgba(244, 226, 241, 0.248);
+  border-radius: 4px;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(244, 97, 255, 0.6);
+  z-index: 1;
+}
+
+.nav-tabs .nav-link.dropdown-toggle.active {
+  background-color: rgba(244, 226, 241, 0.248) !important;
+  color: #c441f0 !important; /* Púrpura personalizado */
+  font-weight: bold;
+  border-radius: 4px;
+  position: relative;
+}
+
+
+</style>
+
+
+
+
+ 
+
+ 

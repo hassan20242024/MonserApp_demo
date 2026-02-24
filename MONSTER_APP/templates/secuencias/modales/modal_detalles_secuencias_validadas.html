@@ -1,0 +1,93 @@
+
+<!-- Modal único para detalles -->
+<div class="modal fade" id="detalleModal" tabindex="-1" aria-labelledby="detalleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content border-0 shadow-lg rounded-4">
+      <div class="modal-header bg-primary text-white rounded-top-4">
+        <h5 class="modal-title fw-bold" id="detalleModalLabel">
+          <i class="bi bi-journal-text me-2"></i> Detalles de Secuencia
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body bg-white">
+        <div class="container-fluid">
+          <div class="row g-4">
+
+          <!-- Datos generales -->
+<div class="col-md-6 animar-seccion">
+  <div class="p-4 border rounded-3 shadow-sm h-100">
+    <h6 class="text-primary fw-semibold mb-3">Datos Generales</h6>
+<div class="mb-3">
+  <label for="modalNombreInput" class="form-label"><strong>Nombre:</strong></label>
+  <input type="text" id="modalNombreInput" class="form-control shadow-sm" placeholder="Nombre de la secuencia">
+</div>
+
+<p><strong>Status:</strong> <span id="modalStatus" class="estado-dinamico badge rounded-pill"></span></p>
+
+<div>
+  <label for="modalSistemaInput" class="form-label"><strong>Sistema:</strong></label>
+<select id="modalSistemaInput" class="form-select shadow-sm">
+  <option value="">Selecciona un sistema</option>
+</select>
+</div>
+  </div>
+</div>
+
+<!-- Técnica.. -->
+<div class="col-md-6 animar-seccion">
+  <div class="p-4 border rounded-3 shadow-sm h-100">
+    <h6 class="text-primary fw-semibold mb-3">Técnica</h6>
+<p id="grupoProtocolo"><strong>Protocolo:</strong> <span id="modalProtocolo" class="text-muted"></span></p>
+<p id="grupoMetodo"><strong>Método:</strong> <span id="modalMetodo" class="text-muted"></span></p>
+<p id="grupoParametro"><strong>Parámetro:</strong> <span id="modalParametro" class="text-muted"></span></p>
+<p id="grupoProceso"><strong>Proceso:</strong> <span id="modalProceso" class="text-muted"></span></p>
+
+  </div>
+</div>
+
+
+<!-- Firmas o responsables.. -->
+<div class="col-md-6 animar-seccion d-none" id="responsablesSection">
+  <div class="p-4 border rounded-3 shadow-sm bg-light">
+    <h6 class="text-primary fw-semibold mb-3">Responsables</h6>
+    <ul class="list-unstyled mb-0">
+      <li id="registradaItem"><strong>Registrada por:</strong> <span id="modalRegistradaPor" class="text-muted"></span></li>
+      <li id="validadaItem"><strong>Validada por:</strong> <span id="modalValidadaPor" class="text-muted"></span></li>
+      <li id="impresaItem"><strong>Impresa por:</strong> <span id="modalImpresaPor" class="text-muted"></span></li>
+      <li id="reportadaItem"><strong>Reportada por:</strong> <span id="modalReportadaPor" class="text-muted"></span></li>
+      <li id="auditadaItem"><strong>Auditada por:</strong> <span id="modalAuditadaPor" class="text-muted"></span></li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- Descripciones (dinámicas) -->
+<div class="col-md-6">
+  <div class="p-4 border rounded-3 shadow-sm bg-light">
+    <h6 class="text-primary fw-semibold mb-3">Descripciones</h6>
+    <div id="modalDescripcion" class="small"></div>
+  </div>
+</div>
+
+            <!-- Observaciones -->
+            <div class="col-12">
+              <div class="p-4 border rounded-3 shadow-sm">
+                <h6 class="text-primary fw-semibold mb-3">Observaciones</h6>
+                <textarea class="form-control shadow-sm" id="modalObservaciones" rows="4" style="background-color: #fff;"></textarea>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer bg-light rounded-bottom-4">
+        <button type="button" class="btn btn-primary px-4" id="btnGuardarCambios">
+          <i class="bi bi-save me-1"></i> Guardar Cambios
+        </button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle me-1"></i> Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,101 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/secuencias/modales/modalCrearSecuenciaOtro.css' %}">
+
+<div class="modal fade" id="crearSecuenciaModalOtro" tabindex="-1" aria-labelledby="crearSecuenciaModalLabel" aria-hidden="true">
+  <!-- Aquí agregamos modal-dialog-centered para centrar verticalmente -->
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+    <div class="modal-content">
+      <form id="myFormCreacionProtocoloOtro">
+        {% csrf_token %}
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="crearSecuenciaModalLabelOtros"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Campos ocultos -->
+          {% now "Y-m-d G:i:s" as today_str %}
+          <input type="text" name="fecha_configuracion_protocolo_proceso" value="{{ today_str }}" hidden>
+          <input type="text" name="fecha_configuracion_protocolo_metodo" value="{{ today_str }}" hidden>
+
+          <!-- Nombre y Fecha en la misma fila -->
+          <div class="form-row">
+            <div class="mb-3">
+              <label class="form-label">Nombre</label>
+              <input type="text" autocomplete="off" name="nombre" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Fecha de Inicio</label>
+              <input type="datetime-local" name="fecha_Inicio" id="fecha_Inicio" class="form-control" required>
+            </div>
+          </div>
+
+          <!-- Sistema y Protocolo en la misma fila... -->
+          <div class="form-row">
+            <div class="mb-3">
+              <label class="form-label">Sistema</label>
+              <select name="sistema" id="sistemaOtro" required>
+                <option value="">Seleccione...</option>
+                {% for item in sistema %}
+                {% if item.condicion == "Activo"  %}
+                <option value="{{item.id}}">{{item}}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Método</label>
+              <select name="metodo" id="metodo" required>
+                <option value="">Seleccione...</option>
+         {% for item in metodo.all %}
+        <option value="{{item.id}}">{{item}}</option>
+        {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <!-- Muestras -->
+          <div class="mb-3">
+            <label class="form-label">Muestras</label>
+            <select name="muestras" id="muestrasOtro" multiple required>
+            </select>
+          </div>
+
+          <!-- Observaciones -->
+          <div class="mb-3">
+            <label class="form-label">Observaciones</label>
+            <textarea name="observaciones" class="form-control" rows="3" required></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <!-- Botón Guardar arriba -->
+          <button type="submit" class="btn btn-primary" id="btnGuardarOActualizarOtros">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- Tom Select CSS -->
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+<!-- Tom Select JS -->
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/plugins.css">
+
+<!--Crear secuenia de Otro-->
+<script src="{% static 'js/secuencias/modalAcciones/creacionSecuenciaOtros.js' %}" ></script>
+
+<!--Editar secuenia de Otro-->
+<script src="{% static 'js/secuencias/modalAcciones/edicionSecuenciaOtros.js' %}" ></script>
+
+
+
+
+
+
+

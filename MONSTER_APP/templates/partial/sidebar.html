@@ -1,0 +1,166 @@
+{% load static %}
+
+<!-- === ESTILOS DEL NAVBAR === -->
+<link rel="stylesheet" href="{% static 'css/navbarSidebar/sidebar.css' %}">
+
+<aside  class="main-sidebar sidebar-dark-primary sidebar-gradient " style="background-color: #060f1ce9;"><br>
+ 
+  <!-- Brand Logo -->
+  <a href="{% url 'adm_inicio' %}" class="brand-link nav-link" id="">
+    <img src="/static/dist/img/logo-white.jpg" alt="MonsterAPP Logo" class="img-circle brand-image elevation-3 " >
+    <span class=""><strong>M o n s t e r  APP</strong><br></span><br>
+</a>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+        <li class="nav-header"><strong>PROTOCOLOS</strong></li>
+        <li class="nav-item has-treeview" >
+          {% if user.is_authenticated %}
+          <a href="" class="nav-link">
+            <i class="nav-icon fab fa-leanpub"></i>
+            <p>
+              Protocolos de métodos
+              <i class="fas fa-angle-left "></i>
+            </p>
+          </a>
+          {% else %}
+          <a href="" class="nav-link disabled">
+            <i class="nav-icon fab fa-leanpub"></i>
+            <p>
+              Protocolos de métodos
+              <i class="fas fa-angle-left "></i>
+            </p>
+          </a>
+          {% endif %}
+          
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              
+              <a href="{% url 'protocolo_metodos' %}" class="nav-link">
+                <i class="far fa-eye"></i>
+                <p>Ver Protocolos de Métodos</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{% url 'crear_protocolo_metodos' %}" class="nav-link btn-crear-protocolo-sidebar">
+                <i class="fa fa-plus"></i>
+                <p>Crear Protocolos de Métodos</p>
+              </a>
+            </li>
+         </ul>
+    
+         <li class="nav-item has-treeview" >
+          {% if user.is_authenticated %}
+          <a href="" class="nav-link">
+            <i class="nav-icon fas fa-capsules"></i>
+            <p>
+              Protocolos de proceso
+              <i class="fas fa-angle-left "></i>
+            </p>
+          </a>
+          {% else %}
+          <a href="" class="nav-link disabled">
+            <i class="nav-icon fas fa-capsules"></i>
+            <p>
+              Protocolos de proceso
+              <i class="fas fa-angle-left "></i>
+            </p>
+          </a>
+          {% endif %}
+          
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              
+              <a href="{% url 'protocolo_proceso' %}" class="nav-link">
+                <i class="far fa-eye"></i>
+                <p>Ver Protocolos de Proceso</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{% url 'crear_protocolo_proceso' %}" class="nav-link btn-crear-protocolo-proceso-sidebar">
+                <i class="fa fa-plus"></i>
+                <p>Crear Protocolos de Proceso</p>
+              </a>
+            </li>
+         </ul>
+      <li class="nav-header"><strong>LABORATORIO</strong></li>
+      {% if user.is_authenticated %}
+      <li class="nav-item ">
+        <a href="{% url 'chart_js_proceso_secuencias_en_curso' %}" class="nav-link">
+          <i class="nav-icon fas fa-sliders-h"></i>
+          <p>Secuencias</p><br>
+        </a>
+      </li>
+      {% else %}
+      <li class="nav-item ">
+        <a href="{% url 'chart_js_proceso_secuencias_en_curso' %}" class="nav-link disabled">
+          <i class="nav-icon fas fa-sliders-h"></i>
+          <p>Secuencias</p><br>
+        </a>
+      </li>
+      {% endif %}
+      
+      {% if user.is_authenticated %}
+      <li class="nav-item">
+        <a href="{% url 'muestras' %}" class="nav-link">
+          <i class="fa fa-edit"></i>
+          <p>Muestras de Análisis</p>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{% url 'mantenimientos_periodicos' %}" class="nav-link">
+          <i class="fas fa-hammer"></i>
+          <p>Mantenimientos</p>
+        </a>
+      </li>
+      {% else %}
+      <li class="nav-item">
+        <a href="{% url 'muestras' %}" class="nav-link disabled">
+          <i class="fa fa-edit"></i>
+          <p>Muestras</p>
+        </a>
+      </li>
+      {% endif %}
+
+{% comment %} Mostrar sección de AJUSTES solo si es algún tipo de administrador {% endcomment %}
+{% if request.user.is_superuser or request.user.groups.all.0.name == 'Administrador' %}
+    <li class="nav-header"><strong>AJUSTES</strong></li>
+
+    {# Todos los administradores ven Configuración de Protocolos #}
+    <li class="nav-item">
+        <a href="{% url 'configuracion_protocolo_metodos' %}" class="nav-link">
+            <i class="fas fa-cogs"></i>
+            <p>Configuración de Protocolos</p><br>
+        </a>
+    </li>
+
+    {# Solo Administrador real o superuser ve el panel de Django admin #}
+    {% if request.user.is_superuser or request.user.groups.all.0.name == 'Superusuario' %}
+        <li class="nav-item">
+            <a href="{% url 'admin:index' %}" class="nav-link text-white">
+                <i class="fas fa-wrench"></i>
+                <p>Administración</p>
+            </a>
+        </li>
+    {% endif %}
+{% endif %}
+    </nav>
+    <!-- /.sidebar-menu. -->
+  </div>
+  <!-- /.sidebar -->
+</aside>
+
+  <!-- Mostrar Swal alert mientrar redirige el formulario protocolo metodo-->
+<script src="{% static 'js/protocoloMetodos/swalEsperarRespuesta.js' %}" > </script>
+
+  <!-- Mostrar Swal alert mientrar redirige el formulario protocolo proceso-->
+<script src="{% static 'js/protocoloProcesos/swalEsperarRespuesta.js' %}" > </script>
+
+
+
+

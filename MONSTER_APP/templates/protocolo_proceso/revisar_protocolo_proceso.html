@@ -1,0 +1,268 @@
+{% extends "partial/body.html" %}
+
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% block contenido %}
+{% load django_bootstrap5 %}
+{% load mathfilters %}
+{% include "partial/loadingPaginas.html" %}
+
+<link href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.0.3/b-3.0.1/b-html5-3.0.1/date-1.5.2/sl-2.0.0/datatables.min.css" rel="stylesheet">
+<br>
+
+<div id="contenido-cargado" class="d-none">
+  <div class="container-fluid">
+    <div class="row">
+
+      <!-- Card Estado de Muestras -->
+      <div class="col-md-6">
+        <div class="card shadow-sm border-0">
+          <div class="card-header bg-secondary text-white d-flex align-items-center justify-content-between">
+            <h5 class="mb-2">📊 Estado de Muestras</h5>
+            <span class="badge bg-light text-dark">Actualizado</span>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table id="tabla-muestras" class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th style="width: 50%">🧪 Muestras</th>
+                    <th style="width: 50%">📈 Progreso</th>
+                  </tr>
+                </thead>
+                <tbody id="muestras-body">
+                  <tr>
+                    <td colspan="2" class="text-center text-muted">
+                      <div class="spinner-border text-primary" role="status" style="width: 1.5rem; height: 1.5rem;">
+                        <span class="visually-hidden">Cargando...</span>
+                      </div>
+                      <span class="ms-2">Cargando muestras...</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Protocolo -->
+<div class="col-md-6">
+  <div class="card shadow-sm border-0 sticky-card">
+    <div class="card-header bg-secondary text-white">
+      <h5 class="mb-2">📝 Información del Protocolo</h5>
+    </div>
+    <div class="card-body" id="protocolo-info">
+      <!-- Info del protocolo y media dona se cargará aquí -->
+    </div>
+    <div class="mb-3 text-end">
+  <button class="btn btn-outline-secondary" onclick="window.history.back()">
+    ← Volver atrás
+  </button>
+</div>
+
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<!-- Estilos personalizados (copiados exactamente del código 1) -->
+<style>
+  .sticky-card {
+    position: sticky;
+    top: 20px; /* Espacio desde el top de la ventana */
+    z-index: 1000;
+  }
+
+.progress {
+  padding: 3px;
+  background: rgba(10, 1, 51, 0.1);
+  border-radius: 6px;
+  box-shadow: inset 0 1px 2px rgba(154, 187, 231, 0.4), 0 1px rgba(15, 93, 181, 0.1);
+  margin-bottom: 8px;
+}
+
+.progress-bar-0    { height: 18px; background-color: #ced4da; border-radius: 4px; animation: progressAnimationStrike0 2s; }
+.progress-bar-12_5 { height: 18px; background-color: #dc3545; border-radius: 4px; animation: progressAnimationStrike12_5 3s; }
+.progress-bar-25   { height: 18px; background-color: #ffc107; border-radius: 4px; animation: progressAnimationStrike25 3s; }
+.progress-bar-50   { height: 18px; background-color: #28a745; border-radius: 4px; animation: progressAnimationStrike50 3s; }
+.progress-bar-75   { height: 18px; background-color: #1bd7f4; border-radius: 4px; animation: progressAnimationStrike75 3s; }
+.progress-bar-100  { height: 18px; background-color: #007bff; border-radius: 4px; animation: progressAnimationStrike100 3s; }
+
+@keyframes progressAnimationStrike0    { from { width: 0 } to { width: 0% } }
+@keyframes progressAnimationStrike12_5 { from { width: 0 } to { width: 12.5% } }
+@keyframes progressAnimationStrike25   { from { width: 0 } to { width: 25% } }
+@keyframes progressAnimationStrike50   { from { width: 0 } to { width: 50% } }
+@keyframes progressAnimationStrike75   { from { width: 0 } to { width: 75% } }
+@keyframes progressAnimationStrike100  { from { width: 0 } to { width: 100% } }
+
+  .widget-numbers { font-weight: 700; }
+  .fsize-3 { font-size: 1.00rem; }
+  .fsize-1 { font-size: 0.875rem; }
+  .text-muted { color: #6c757d !important; opacity: 0.6; }
+
+  #examplem tbody td:first-child {
+    vertical-align: middle;
+    text-align: left;
+  }
+
+  #examplem tbody tr:nth-child(even) {
+    background-color: #f5f5f5;
+  }
+
+  .table-responsive {
+    overflow-x: visible !important;
+  }
+
+#avanceDonut {
+  display: block;
+  margin: 0 auto;
+  width: 240px !important;
+  height: 240px !important;
+}
+</style>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/v/dt/jq-3.7.0/datatables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const protocoloId = "{{ protocolo_id }}";
+
+  // Mostrar spinner y ocultar contenido al inicio
+  document.getElementById("spinner-carga").classList.remove("d-none");
+  document.getElementById("contenido-cargado").classList.add("d-none");
+
+  // Mapeo de estados para barras de progreso (igual que en código 1)
+  const estadoInfo = {
+    "Registrada": { porcentaje: 12.5, claseBarra: "progress-bar-12_5", colorTexto: "text-danger", descripcion: "Adquiriendo" },
+    "Revisada":   { porcentaje: 25,   claseBarra: "progress-bar-25",   colorTexto: "text-warning", descripcion: "Validada" },
+    "Impresa":    { porcentaje: 50,   claseBarra: "progress-bar-50",   colorTexto: "text-success", descripcion: "Impresa" },
+    "Reportada":  { porcentaje: 75,   claseBarra: "progress-bar-75",   colorTexto: "text-info", descripcion: "Reportada" },
+    "Auditada":   { porcentaje: 100,  claseBarra: "progress-bar-100",  colorTexto: "text-primary", descripcion: "Auditada" },
+    "Sin estado": { porcentaje: 0,    claseBarra: "progress-bar-0",    colorTexto: "text-muted", descripcion: "Sin estado" }
+  };
+
+  // Fetch para cargar info muestras y protocolo simultáneamente
+  fetch(`/api/api_revisar_protocolo_proceso/${protocoloId}/`)
+    .then(response => {
+      if (!response.ok) throw new Error("Error al obtener datos de muestras y protocolo.");
+      return response.json();
+    })
+    .then(data => {
+      // --- Cargar tabla Estado de Muestras ---
+      const tbody = document.getElementById("muestras-body");
+      tbody.innerHTML = "";
+
+      if (!data.muestras || data.muestras.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="2" class="text-center">No hay muestras disponibles</td></tr>`;
+      } else {
+        data.muestras.forEach(muestra => {
+          const estado = muestra.estado || "Sin estado";
+          const info = estadoInfo[estado] || estadoInfo["Sin estado"];
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${muestra.etapa} (Lote: ${muestra.lote_muestra}) (Código: ${muestra.codigo_muestra_producto})</td>
+            <td>
+              <div class="row">
+            <div class="col-md-6">
+              <div class="widget-content-left">
+                <div class="widget-numbers fsize-3 ${info.colorTexto}">
+                  ${info.porcentaje}%
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="widget-content-left fsize-1">
+                <div class="text-muted opacity-6 text-right">${info.descripcion}</div>
+              </div>
+            </div>
+          </div>
+          <div class="progress">
+            <div class="${info.claseBarra}" role="progressbar"
+                 style="width: ${info.porcentaje}%" 
+                 aria-valuenow="${info.porcentaje}" 
+                 aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      // --- Cargar card Información del Protocolo ---
+      const avance = Object.values(data.porcentajes).reduce((a, b) => a + b, 0).toFixed(0);
+      const infoContainer = document.getElementById("protocolo-info");
+
+      infoContainer.innerHTML = `
+        <div class="text-center mb-3">
+          <h3 class="text-primary mb-3"><i class="fas fa-paint-brush"></i> ${data.codigo}</h3>
+          <h5 class="text-muted text-center">${data.nombre}</h5>
+          <h6 class="mt-4 fw-semibold text-secondary">🎯 Porcentaje de avance</h6>
+          <canvas id="avanceDonut" width="240" height="240" style="max-width: 240px; height: 240px;"></canvas>
+        </div>
+      `;
+
+      // Plugin para texto en centro del donut
+      const donutCenterText = {
+        id: 'donutCenterText',
+        beforeDraw(chart) {
+          const { width, height, ctx } = chart;
+          ctx.restore();
+          const fontSize = (height / 6).toFixed(2);
+          ctx.font = `${fontSize}px sans-serif`;
+          ctx.fillStyle = '#007bff';
+          ctx.textBaseline = 'middle';
+          const text = `${avance}%`;
+          const textX = Math.round((width - ctx.measureText(text).width) / 2);
+          const textY = height / 1.25;
+          ctx.fillText(text, textX, textY);
+          ctx.save();
+        }
+      };
+
+      const ctx = document.getElementById('avanceDonut').getContext('2d');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Avance', 'Pendiente'],
+          datasets: [{
+            data: [avance, 100 - avance],
+            backgroundColor: ['#007bff', '#e9ecef'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          rotation: -90,
+          circumference: 180,
+          cutout: '85%',
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: false }
+          }
+        },
+        plugins: [donutCenterText]
+      });
+
+      // ✅ Ocultar spinner y mostrar contenido
+      document.getElementById("spinner-carga").classList.add("d-none");
+      document.getElementById("contenido-cargado").classList.remove("d-none");
+    })
+    .catch(error => {
+      const tbody = document.getElementById("muestras-body");
+      tbody.innerHTML = `<tr><td colspan="2" class="text-danger">${error.message}</td></tr>`;
+
+      // Mostrar contenido y ocultar spinner igual
+      document.getElementById("spinner-carga").classList.add("d-none");
+      document.getElementById("contenido-cargado").classList.remove("d-none");
+    });
+});
+</script>
+
+
+
+{% endblock contenido %}

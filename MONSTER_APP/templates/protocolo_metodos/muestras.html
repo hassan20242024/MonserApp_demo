@@ -1,0 +1,131 @@
+{% extends "partial/body.html" %}
+{% block stylesheet %}
+{% endblock stylesheet %}
+{% block contenido %}
+{% include "partial/loadingPaginas.html" %}
+{% load static %}
+
+<!-- Estilos Tabla y general --->
+<link rel="stylesheet" href="{% static 'css/muestras/modales/modalCrearMuestras.css' %}">
+<link rel="stylesheet" href="{% static 'css/muestras/tabla/estilosTablaGeneral.css' %}">
+
+<!-- Input Material --->
+<script src="https://unpkg.com/gijgo@1.9.14/js/gijgo.min.js" type="text/javascript"></script>
+<link href="https://unpkg.com/gijgo@1.9.14/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- Modal -->
+<div class="modal fade" id="modalMuestra" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+    <div class="modal-content" id="modalMuestraContent">
+      <!-- Aquí se cargará el contenido con AJAX -->
+    </div>
+  </div>
+</div>
+
+<div id="contenido-cargado" class="d-none">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="pagetitle"><br>
+          <h4 class="">Gestión de Muestras de Análisis</h4><br>
+        </div>
+      </div>
+      <div class="col-md-6"><br>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button
+              class="btn btn-primary"
+              id="openMuestraModal"
+              style="background:#4316708e; border: none; border-radius: 50px; font-size: 14px; padding: 6px 16px;">
+            
+            <span class="fa fa-plus-circle"></span> Ingresar muestras.
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-6"> <br>
+            <div class="text-right">
+              <div class="text-right">
+              </div>
+            </div>
+          </div>
+          <br>
+        </div>
+      </div>
+
+      <div class="card-body table-responsive">
+        <table id="example3" class="display" style="width:100%">
+          <thead>
+            <tr>
+              <th>Detalles</th>
+              <th class="text-center">Fecha Ingreso</th>
+              <th class="text-center">Nombre</th>
+              <th class="text-center">Lote</th>
+              <th class="text-center">Tipo de muestra</th>
+              <th class="text-center">Etapa</th>
+              <th class="text-center">CIM/LIMS</th>
+              <th class="text-center">Código Producto</th>
+              <th class="text-center">Observaciones</th>
+              <th class="all text-center">Opciones</th>
+            </tr>
+          </thead>
+          <tbody id="myTable">
+          </tbody>
+        </table>
+
+        <link href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.0.3/b-3.0.1/b-html5-3.0.1/date-1.5.2/sl-2.0.0/datatables.min.css" rel="stylesheet">
+        <script src="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.0.3/b-3.0.1/b-html5-3.0.1/date-1.5.2/sl-2.0.0/datatables.min.js"></script>
+      </div>
+    </div>
+  </div>
+</div>
+
+<link href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.0.3/b-3.0.1/b-html5-3.0.1/date-1.5.2/sl-2.0.0/datatables.min.css" rel="stylesheet">
+
+<!-- Datatable-->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.0.3/b-3.0.1/b-html5-3.0.1/date-1.5.2/sl-2.0.0/datatables.min.js"></script>
+
+<!-- VISUALIZAR TABLA AJAX  -->
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+<style>
+/* Oculta todos los items después del tercero */
+.ts-control .item:nth-child(n+4) {
+  display: none;
+}
+
+/* Oculta el texto + más... por defecto */
+.ts-mas {
+  color: #666;
+  margin-left: 4px;
+  font-size: 0.85em;
+  display: inline-block;
+}
+</style>
+
+
+<!--Función para manejar el submit del formulario del modal por AJAX-->
+<script src="{% static 'js/muestras/activarSubmitAjax.js' %}" ></script>
+
+<!--Función Inicializar Tom Select-->
+<script src="{% static 'js/muestras/inicializarTomSelect.js' %}" ></script>
+
+<!--Función Mostrar y/o Ocultar icono "+mas..."-->
+<script src="{% static 'js/muestras/actualizarMasTexto.js' %}" ></script>
+
+<!--MuestrasTablauardar -->
+<script src="{% static 'js/muestras/muestrasTableInit.js' %}" ></script>
+
+<!--Editar Muestras-->
+<script src="{% static 'js/muestras/editarMuestras.js' %}" ></script>
+
+<!--Duplicar Muestras-->
+<script src="{% static 'js/muestras/duplicarMuestras.js' %}" ></script>
+
+{% endblock contenido %}
+

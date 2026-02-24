@@ -1,0 +1,150 @@
+{% extends "partial/body.html" %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block contenido %}
+  {% include "partial/header_gestion_secuencias.html" %}
+  {% include "partial/loading.html" %}
+
+  <!-- Estilos externos -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="{% static 'css/secuencias/procesoSecuenciasEnCurso.css' %}">
+
+  <!-- Modales. -->
+  {% include "secuencias/modales/modal_crear_secuencia_protocolo_metodo.html" %}
+  {% include "secuencias/modales/modal_crear_secuencia_protocolo_proceso.html" %}
+  {% include "secuencias/modales/modal_crear_secuencia_otro.html" %}
+  {% include "secuencias/modales/modal_detalles_crear_secuencias_en_curso.html" %}
+
+  <!-- Contenido principal -->
+  <div class="contenido" id="content" style="display: none;">
+    <div class="container-fluid">
+      <div class="card">
+        <div class="card-body table-responsive table-bordered">
+
+          <!-- Checkboxes y Select -->
+          <div class="estado-checkboxes d-flex gap-4 align-items-center mb-3">
+
+            <!-- Interruptor Invalidar -->
+            <div id="grupoInvalidar" class="d-flex align-items-center gap-2 switch-danger">
+              <label class="custom-switch">
+                <input type="checkbox" id="toggleInvalidar">
+                <span class="custom-slider"></span>
+              </label>
+              <label for="toggleInvalidar" class="mb-0 text-danger fw-semibold">
+                <i class="fa fa-thumbs-down me-1"></i> Invalidar
+              </label>
+            </div>
+
+            <!-- Interruptor Validar -->
+            <div id="grupoRevisar" class="d-flex align-items-center gap-2 switch-info">
+              <label class="custom-switch">
+                <input type="checkbox" id="toggleRevisar">
+                <span class="custom-slider"></span>
+              </label>
+              <label for="toggleRevisar" class="mb-0 text-info fw-semibold">
+                <i class="fa fa-thumbs-up me-1"></i> Validar
+              </label>
+
+              <!-- Botón Nueva Secuencia -->
+              <div class="btn-group mx-2" role="group">
+                <button
+                  type="button"
+                  id="btnNuevaSecuencia"
+                  class="btn btn-primary dropdown-toggle hidden-role"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  style="background:#4316708e; border: none; border-radius: 50px; font-size: 14px; padding: 6px 16px;"
+                >
+                  <span class="fa fa-plus-circle"></span> Nueva secuencia
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-sm-start" id="nuevaSecuencia">
+                  <li>
+                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#crearSecuenciaModal">
+                      Protocolo de método
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#crearSecuenciaModalProceso">
+                      Protocolo de proceso
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#crearSecuenciaModalOtro">
+                      Otro
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Select de ítems por página -->
+            <label for="itemsPerPage" class="form-label mb-0 ms-auto">Mostrar:</label>
+            <select id="itemsPerPage" class="form-select form-select-sm" style="width: auto; display: inline-block;">
+              <option value="5">5</option>
+              <option value="10" selected>10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+            </select>
+
+            <!-- Botones de acción -->
+            <button id="btnMarcarInvalida" class="btn btn-danger col-invalida hidden-col rounded-pill d-inline-flex align-items-center gap-2 px-3 py-1">
+              Marcar como Inválida
+            </button>
+
+            <button id="btnCambiarRevisadas" class="btn btn-info col-revisar d-none rounded-pill d-inline-flex align-items-center gap-2 px-3 py-1">
+              <i class="fa fa-check-circle me-1"></i> Validar
+            </button>
+          </div>
+
+          <!-- Tabla de secuencias -->
+          <table id="table" class="table table-sm text-center expandable-table">
+            <thead>
+              <tr>
+                <th style="display:none;"></th>
+                <th><input id="filtroNombre" class="form-control form-control-sm" placeholder="Nombre" /></th>
+                <th><input id="filtroMetodo" class="form-control form-control-sm" placeholder="Método / Protocolo" /></th>
+                <th><input id="filtroParametro" class="form-control form-control-sm" placeholder="Parámetro" /></th>
+                <th><input id="filtroMuestra" class="form-control form-control-sm" placeholder="Muestra" /></th>
+                <th><input id="filtroSistema" class="form-control form-control-sm" placeholder="Sistema" /></th>
+                <th class="col-invalida hidden-col">Invalidar</th>
+                <th class="col-revisar d-none">Validar</th>
+                <th class="text-center col-opciones">Opciones</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+
+          <!-- Paginación -->
+          <div id="pagination" class="text-center mt-3"></div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+<div id="user-data" data-user-role="{{ request.user.groups.all.0.name|default:'' }}"></div>
+
+
+<!--Roles-->
+<script src="{% static 'js/secuencias/creacionSecuencias/domContentLoaded.js' %}" ></script>
+<!--Invalidar Secuencias-->
+<script src="{% static 'js/secuencias/creacionSecuencias/invalidarSecuencias.js' %}" ></script>
+<!--Validar Secuencias-->
+<script src="{% static 'js/secuencias/creacionSecuencias/validarSecuencias.js' %}" ></script>
+<!--Detalles Secuencias-->
+<script src="{% static 'js/secuencias/creacionSecuencias/detallesSecuencias.js' %}" ></script>
+<!--Descipcion de Muestras Secuencias-->
+<script src="{% static 'js/secuencias/creacionSecuencias/descripcionMuestrasSecuencias.js' %}" ></script>
+<!--Expandir Descipcion de Muestras Secuencias-->
+<script src="{% static 'js/secuencias/creacionSecuencias/expandirDescripcionMustras.js' %}" ></script>
+<!--General-->
+<script src="{% static 'js/secuencias/creacionSecuencias/tablaInicioSecuencias.js' %}" ></script>
+
+
+
+{% endblock %}
+
+

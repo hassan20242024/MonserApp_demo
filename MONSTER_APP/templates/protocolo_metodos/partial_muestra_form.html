@@ -1,0 +1,116 @@
+{% load crispy_forms_tags %}
+
+<link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/contacts/contact-1/assets/css/contact-1.css">
+<!--Advanced multiselect esasy-->
+<script src="https://www.jqueryscript.net/demo/advanced-multiselect-easy/easySelect.js"></script>
+
+<div id="muestrasFormCrear">
+    <div class="shadow-sm overflow-hidden rounded" style="background-color: #1b3d70c2;">
+<h5 class="text-white text-center py-2">
+  {% if editar %}
+    Editar Muestra
+  {% else %}
+    Ingresar Muestra(s)
+  {% endif %}
+</h5>
+</div>
+
+<!-- Contenedor del formulario -->
+<div class="border rounded shadow-sm overflow-hidden" style="background-color: rgba(252, 252, 252, 0.529);">
+
+<form id="myModelForm" method="POST"
+  action="{% if form.instance.pk and not duplicar %}{% url 'editar_muestras' form.instance.pk %}
+          {% else %}{% url 'ingresar_muestras' %}{% endif %}">
+    {% csrf_token %}
+
+    <div class="row gy-1 p-4">
+
+      <!-- Fila 1: Nombre y Fecha -->
+      <div class="col-12 col-md-6">
+        {{ form.nombre_muestra|as_crispy_field }}
+      </div>
+      <div class="col-12 col-md-6">
+        {{ form.fecha_ingreso|as_crispy_field }}
+      </div>
+
+      <!-- Fila 2: Lote y Tipo -->
+      <div class="col-12 col-md-6">
+        {{ form.lote_muestra|as_crispy_field }}
+      </div>
+      <div class="col-12 col-md-6">
+        {{ form.tipo_muestra|as_crispy_field }}
+      </div>
+
+      <!-- Fila 3: Código Interno y Producto -->
+      <div class="col-12 col-md-6">
+        {{ form.codigo_muestra_interno|as_crispy_field }}
+      </div>
+      <div class="col-12 col-md-6">
+        {{ form.codigo_muestra_producto|as_crispy_field }}
+      </div>
+
+      <!-- Fila única: Etapa -->
+      <div class="col-12">
+        <label for="id_etapa" class="form-label">Etapas</label>
+<select name="etapa"
+        id="id_etapa"
+        class="form-control"
+        {% if not editar %}multiple{% endif %}
+        data-etapa-seleccionada="{{ etapa_actual_id|default:'' }}"
+        required>
+</select>
+      </div>
+
+      <!-- Fila única: Observaciones -->
+      <div class="col-12 py-3">
+        {{ form.observaciones_muestras|as_crispy_field }}
+      </div>
+
+      <!-- Botón -->
+      <div class=" btnGuardarMuestrasCreacion">
+<button type="submit" class="btn btn-primary btn-block">
+  {% if form.instance.pk %}Actualizar{% else %}Guardar{% endif %}
+</button>
+      </div>
+
+    </div>
+  </form>
+
+</div>
+
+</div>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+
+  const select = new TomSelect('#id_etapa', {
+    theme: 'bootstrap5',
+    placeholder: 'Seleccione una o más etapas',
+    plugins: ['remove_button'],
+    maxItems: null,
+    allowEmptyOption: true,
+    valueField: 'id',
+    labelField: 'etapa',
+    searchField: 'etapa',
+    options: [],  // TomSelect lo llenará luego
+    items: []     // Valor por defecto
+  });
+  
+
+  fetch('/lista_etapas/')
+    .then(response => response.json())
+    .then(data => {
+      data.forEach(item => {
+        select.addOption(item);  // Add dynamically
+      });
+      select.refreshOptions(false);
+    })
+    .catch(error => {
+      console.error('Error cargando etapas:', error);
+    });
+});
+
+</script>
+

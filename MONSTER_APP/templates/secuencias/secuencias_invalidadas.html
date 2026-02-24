@@ -1,0 +1,94 @@
+{% extends "partial/body.html" %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block contenido %}
+  {% include "partial/header_gestion_secuencias.html" %}
+  {% include "partial/loading.html" %}
+
+  <!-- Estilos externos -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="{% static 'css/secuencias/procesoSecuenciasEnCurso.css' %}">
+
+  <!-- Modales -->
+  {% include "secuencias/modales/modal_detalles_crear_secuencias_en_curso.html" %}
+
+  <!-- Contenido principal -->
+  <div class="contenido" id="content" style="display: none;">
+    <div class="container-fluid">
+      <div class="card">
+        <div class="card-body table-responsive table-bordered">
+
+          <!-- Checkboxes y Select -->
+          <div class="estado-checkboxes d-flex gap-4 align-items-center mb-3">
+
+            <!-- Interruptor Invalidar -->
+
+            <!-- Interruptor Validar -->
+
+            <!-- Select de ítems por página -->
+            <label for="itemsPerPage" class="form-label mb-0 ms-auto">Mostrar:</label>
+            <select id="itemsPerPage" class="form-select form-select-sm" style="width: auto; display: inline-block;">
+              <option value="5">5</option>
+              <option value="10" selected>10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+            </select>
+
+            <!-- Botones de acción -->
+            <button id="btnMarcarInvalida" class="btn btn-danger col-invalida hidden-col rounded-pill d-inline-flex align-items-center gap-2 px-3 py-1">
+              Marcar como Inválida
+            </button>
+
+            <button id="btnCambiarRegistrada" class="btn btn-info rounded-pill d-inline-flex align-items-center gap-2 px-3 py-1">
+              <i class="fa fa-check-circle me-1"></i> Listar
+            </button>
+          </div>
+
+          <!-- Tabla de secuencias -->
+          <table id="table" class="table table-sm text-center expandable-table">
+            <thead>
+              <tr>
+                <th style="display:none;"></th>
+                <th><input id="filtroNombre" class="form-control form-control-sm" placeholder="Nombre" /></th>
+                <th><input id="filtroMetodo" class="form-control form-control-sm" placeholder="Método / Protocolo" /></th>
+                <th><input id="filtroParametro" class="form-control form-control-sm" placeholder="Parámetro" /></th>
+                <th><input id="filtroMuestra" class="form-control form-control-sm" placeholder="Muestra" /></th>
+                <th><input id="filtroSistema" class="form-control form-control-sm" placeholder="Sistema" /></th>
+                <th>Causas</th>
+                <th>Listar</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+
+          <!-- Paginación -->
+          <div id="pagination" class="text-center mt-3"></div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+<div id="user-data" data-user-role="{{ request.user.groups.all.0.name|default:'' }}"></div>
+
+
+<!--Roles-->
+<script src="{% static 'js/secuencias/secuenciasInvalidas/domContentLoadedSecuenciasInvalidas.js' %}" ></script>
+<!--Registrar Secuencias-->
+<script src="{% static 'js/secuencias/secuenciasInvalidas/registrarSecuencias.js' %}" ></script>
+<!--Detalles Secuencias-->
+<script src="{% static 'js/secuencias/creacionSecuencias/detallesSecuencias.js' %}" ></script>
+<!--Descipcion de Muestras Secuencias-->
+<script src="{% static 'js/secuencias/creacionSecuencias/descripcionMuestrasSecuencias.js' %}" ></script>
+<!--Expandir Descipcion de Muestras Secuencias-->
+<script src="{% static 'js/secuencias/creacionSecuencias/expandirDescripcionMustras.js' %}" ></script>
+<!--Tabla-->
+<script src="{% static 'js/secuencias/secuenciasInvalidas/tablaSecuenciasInvalidas.js' %}" ></script>
+
+
+
+{% endblock %}
+
+

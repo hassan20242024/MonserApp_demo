@@ -1,0 +1,372 @@
+{% extends "partial/body.html" %}
+{% load static %}
+{% load month_tags %}
+{% load i18n %}
+{% block contenido %}
+{% include "partial/loadingPaginas.html" %}
+<script src="{% static 'js/highcharts/12.3.0/highcharts.js' %}"></script>
+<script src="{% static 'js/highcharts/12.3.0/modules/data.js' %}"></script>
+<script src="{% static 'js/highcharts/12.3.0/modules/exporting.js' %}"></script>
+<script src="{% static 'js/highcharts/12.3.0/modules/accessibility.js' %}"></script>
+    
+   
+{% if user.is_authenticated %}
+<style>
+.highcharts-data-label text,
+.highcharts-data-label-connector {
+  opacity: 0;
+  animation: fadeIn 1s ease-in-out forwards;
+  animation-delay: 0.5s;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+</style>
+
+<div id="contenido-cargado" class="d-none"> 
+   <div class="container-fluid">
+    <div class="card-body">
+      <h4 class="">Información General</h4>
+    </div>
+    <div class="row">
+      <div class="col-lg-3 col-6">
+        <div class="small-box bg-gradient-info">
+          <div class="inner">
+            <h3 class="count-number" data-count="{{registro_total_protocolo_metodos}}">0</h3>
+            <p>Protocolos de Métodos</p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-bag"></i>
+          </div>
+          <a href="{% url 'protocolo_metodos' %}" class="small-box-footer">Mas información <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-3 col-6">
+        <div class="small-box bg-gradient-success text-white">
+          <div class="inner">
+            <h3 class="count-number" data-count="{{registro_total_protocolo_proceso}}">0</h3>
+            <p>Protocolos de Proceso</p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-stats-bars"></i>
+          </div>
+          <a href="{% url 'protocolo_proceso' %}" class="small-box-footer">Mas información  <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-3 col-6">
+        <div class="small-box bg-gradient-warning text-white" >
+          <div class="inner">
+            <h3>0<sup style="font-size: 20px"></sup></h3>
+
+            <p>Desarrollos</p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-person-add"></i>
+          </div>
+          <a href="#" class="small-box-footer">Mas información  <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-3 col-6">
+        <div class="small-box bg-gradient-danger text-white">
+          <div class="inner">
+            <h3>0  
+            </h3>
+
+            <p>Estabilidades</p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-pie-graph"></i>
+          </div>
+          <a href="#" class="small-box-footer">Mas información  <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+    </div>
+
+<!-- Métodos - Finalizados -->
+<div class="row">
+  <section class="col-lg-6 connectedSortable">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">
+          <div class="dropdown">
+            <a class="dropdown-toggle text-dark" type="button" id="dropdownMenu_metodos_finalizados" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-chart-pie mr-1"></i>
+              <span id="dropdownLabel_metodos_finalizados">
+                Protocolos de Métodos Finalizados año {{ año_actual }}
+              </span>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu_metodos_finalizados">
+              {% for año in años_disponibles %}
+              <li>
+                <button class="dropdown-item añoSelector" data-grafico="metodos_finalizados" data-año="{{ año }}">
+                  Año {{ año }}
+                </button>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </h3>
+      </div>
+      <div id="grafico_metodos_finalizados" ></div>
+    </div>
+  </section>
+
+  <!-- Métodos - Motivos -->
+  <section class="col-lg-6 connectedSortable">
+    <div class="card bg-gradient-white">
+      <div class="card-header">
+        <h3 class="card-title">
+          <div class="dropdown">
+            <a class="dropdown-toggle text-dark" type="button" id="dropdownMenu_motivos_metodos" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-chart-pie mr-1"></i>
+              <span id="dropdownLabel_motivos_metodos">
+                Motivos Métodos año {{ año_actual }}
+              </span>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu_motivos_metodos">
+              {% for año in años_disponibles %}
+              <li>
+                <button class="dropdown-item añoSelector" data-grafico="motivos_metodos" data-año="{{ año }}">
+                  Año {{ año }}
+                </button>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </h3>
+      </div>
+      <div id="grafico_motivos_metodos"></div>
+    </div>
+  </section>
+</div>
+
+<!-- Proceso - Finalizados -->
+<div class="row">
+  <section class="col-lg-6 connectedSortable">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">
+          <div class="dropdown">
+            <a class="dropdown-toggle text-dark" type="button" id="dropdownMenu_proceso_finalizados" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-chart-pie mr-1"></i>
+              <span id="dropdownLabel_proceso_finalizados">
+                Protocolos de Proceso Finalizados año {{ año_actual }}
+              </span>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu_proceso_finalizados">
+              {% for año in años_disponibles %}
+              <li>
+                <button class="dropdown-item añoSelector" data-grafico="proceso_finalizados" data-año="{{ año }}">
+                  Año {{ año }}
+                </button>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </h3>
+      </div>
+      <div id="grafico_proceso_finalizados"></div>
+    </div>
+  </section>
+
+  <!-- Proceso - Motivos -->
+  <section class="col-lg-6 connectedSortable">
+    <div class="card bg-gradient-white">
+      <div class="card-header">
+        <h3 class="card-title">
+          <div class="dropdown">
+            <a class="dropdown-toggle text-dark" type="button" id="dropdownMenu_motivos_proceso" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-chart-pie mr-1"></i>
+              <span id="dropdownLabel_motivos_proceso">
+                Motivos Proceso año {{ año_actual }}
+              </span>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu_motivos_proceso">
+              {% for año in años_disponibles %}
+              <li>
+                <button class="dropdown-item añoSelector" data-grafico="motivos_proceso" data-año="{{ año }}">
+                  Año {{ año }}
+                </button>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </h3>
+      </div>
+      <div id="grafico_motivos_proceso"></div>
+    </div>
+  </section>
+</div>
+ </div>
+</div>
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const spinner = document.getElementById("spinner-carga");
+  const contenido = document.getElementById("contenido-cargado");
+
+  // Mostrar spinner y ocultar contenido
+  if (spinner && contenido) {
+    spinner.classList.remove("d-none");
+    contenido.classList.add("d-none");
+  }
+
+  const añoActual = "{{ año_actual }}";
+  const iniciales = ['metodos_finalizados', 'motivos_metodos', 'proceso_finalizados', 'motivos_proceso'];
+
+  // Crear array de promesas para todas las cargas de gráficos
+  const promesas = iniciales.map(grafico => cargarGrafico(grafico, añoActual));
+
+  // Cuando todas las promesas se resuelvan, ocultar spinner y mostrar contenido
+  Promise.all(promesas).then(() => {
+    if (spinner && contenido) {
+      spinner.classList.add("d-none");
+      contenido.classList.remove("d-none");
+    }
+  });
+
+  // Manejar selección de dropdowns
+  document.querySelectorAll('.añoSelector').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const año = btn.dataset.año;
+      const grafico = btn.dataset.grafico;
+
+      // Actualizar label del dropdown
+      const label = document.getElementById(`dropdownLabel_${grafico}`);
+      if (label) {
+        label.textContent = `${formatearTitulo(grafico)} año ${año}`;
+      }
+
+      // Cargar gráfico correspondiente
+      cargarGrafico(grafico, año);
+    });
+  });
+});
+
+function formatearTitulo(grafico) {
+  switch (grafico) {
+    case 'metodos_finalizados':
+      return 'Protocolos de Métodos Finalizados';
+    case 'motivos_metodos':
+      return 'Motivos Métodos';
+    case 'proceso_finalizados':
+      return 'Protocolos de Proceso Finalizados';
+    case 'motivos_proceso':
+      return 'Motivos Proceso';
+    default:
+      return '';
+  }
+}
+
+function cargarGrafico(grafico, año) {
+  let url = "";
+  let containerId = "";
+  let chartOptions = null;
+
+  switch (grafico) {
+    case 'metodos_finalizados':
+      url = `/api/chart/finalizados/metodos/${año}/`;
+      containerId = 'grafico_metodos_finalizados';
+      break;
+    case 'motivos_metodos':
+      url = `/api/chart/motivos/metodos/${año}/`;
+      containerId = 'grafico_motivos_metodos';
+      break;
+    case 'proceso_finalizados':
+      url = `/api/chart/finalizados/proceso/${año}/`;
+      containerId = 'grafico_proceso_finalizados';
+      break;
+    case 'motivos_proceso':
+      url = `/api/chart/motivos/proceso/${año}/`;
+      containerId = 'grafico_motivos_proceso';
+      break;
+  }
+
+  return fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      if (grafico === 'metodos_finalizados' || grafico === 'proceso_finalizados') {
+        chartOptions = {
+          chart: { type: 'column' },
+          title: { text: null },
+          xAxis: { categories: data.categories },
+          series: [{ name: 'Finalizado', data: data.data }]
+        };
+      } else {
+        chartOptions = data;
+      }
+      Highcharts.chart(containerId, chartOptions);
+    })
+    .catch(err => {
+      console.error(`Error cargando gráfico ${grafico}:`, err);
+    });
+}
+
+//Simular Contador
+  document.addEventListener("DOMContentLoaded", function () {
+    const counters = document.querySelectorAll('.count-number');
+    const speed = 50; // Aumenta el número para que sea más lento
+
+    counters.forEach(counter => {
+      const updateCount = () => {
+        const target = +counter.getAttribute('data-count');
+        const count = +counter.innerText;
+
+        const increment = Math.ceil(target / speed);
+
+        if (count < target) {
+          counter.innerText = count + increment;
+          setTimeout(updateCount, 30); // Aumenta el tiempo para suavizar aún más
+        } else {
+          counter.innerText = target;
+        }
+      };
+
+      updateCount();
+    });
+  });
+</script>
+  {% endblock %}
+  {% else %}
+<!-- Inicia sesión -->
+<div class="container1">
+  <h1 class="display-6"><strong>Su sesión ha terminado!</strong></h1>
+  <div class="astronaut">
+    <div class="astronaut__backpack"></div>
+    <div class="astronaut__body"></div>
+    <div class="astronaut__body__chest"></div>
+    <div class="astronaut__arm-left1"></div>
+    <div class="astronaut__arm-left2"></div>
+    <div class="astronaut__arm-right1"></div>
+    <div class="astronaut__arm-right2"></div>
+    <div class="astronaut__arm-thumb-left"></div>
+    <div class="astronaut__arm-thumb-right"></div>
+    <div class="astronaut__leg-left"></div>
+    <div class="astronaut__leg-right"></div>
+    <div class="astronaut__foot-left"></div>
+    <div class="astronaut__foot-right"></div>
+    <div class="astronaut__wrist-left"></div>
+    <div class="astronaut__wrist-right"></div>
+    
+    <div class="astronaut__cord">
+      <canvas id="cord" height="500px" width="500px"></canvas>
+    </div>
+    
+    <div class="astronaut__head">
+      <canvas id="visor" width="60px" height="60px"></canvas>
+      <div class="astronaut__head-visor-flare1"></div>
+      <div class="astronaut__head-visor-flare2"></div>
+    </div>
+  </div>
+ 
+  
+ </div>
+ <!-- Inicia sesion-->
+  {% endif %}
+  
+
+{% endblock contenido %}

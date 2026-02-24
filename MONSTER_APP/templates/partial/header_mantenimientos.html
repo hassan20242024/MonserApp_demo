@@ -1,0 +1,101 @@
+<div class="container-fluid">
+  <div class="pagetitle"><br>
+    <h4 class="">Mantenimientos Periódicos</h4>
+  </div>
+  <div class="container-fluid">
+    <ul class="nav nav-tabs">
+
+      <li class="nav-item">
+        <a href="{% url 'mantenimientos_periodicos' %}" 
+           class="nav-link {% if request.resolver_match.url_name == 'mantenimientos_periodicos' %}active{% endif %}">
+          Programados
+        </a>
+      </li>
+
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name in 'mantenimientos_buzos_realizados mantenimientos_celdas_realizados mantenimientos_test_realizados mantenimientos_preventivo_realizado calificaciones_realizadas' %}active{% endif %}" 
+     data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+
+    {% if request.resolver_match.url_name == 'mantenimientos_buzos_realizados' %}
+      Lavados de buzos realizados
+    {% elif request.resolver_match.url_name == 'mantenimientos_celdas_realizados' %}
+      Lavados de celdas realizadas
+    {% elif request.resolver_match.url_name == 'mantenimientos_test_realizados' %}
+      Test de diagnóstico realizados
+    {% elif request.resolver_match.url_name == 'mantenimientos_preventivo_realizado' %}
+      Mantenimientos preventivos realizados
+    {% elif request.resolver_match.url_name == 'calificaciones_realizadas' %}
+      Calificaciones realizadas
+    {% else %}
+      Realizados
+    {% endif %}
+
+  </a>
+  <div class="dropdown-menu">
+    <a class="dropdown-item {% if request.resolver_match.url_name == 'mantenimientos_buzos_realizados' %}active{% endif %}" 
+       href="{% url 'mantenimientos_buzos_realizados' %}">Lavados de buzos</a>
+    <a class="dropdown-item {% if request.resolver_match.url_name == 'mantenimientos_celdas_realizados' %}active{% endif %}" 
+       href="{% url 'mantenimientos_celdas_realizados' %}">Lavados de celdas</a>
+    <a class="dropdown-item {% if request.resolver_match.url_name == 'mantenimientos_test_realizados' %}active{% endif %}" 
+       href="{% url 'mantenimientos_test_realizados' %}">Test de diagnóstico</a>
+    <a class="dropdown-item {% if request.resolver_match.url_name == 'mantenimientos_preventivo_realizado' %}active{% endif %}" 
+       href="{% url 'mantenimientos_preventivo_realizado' %}">Mantenimientos preventivos</a>
+    <a class="dropdown-item {% if request.resolver_match.url_name == 'calificaciones_realizadas' %}active{% endif %}" 
+       href="{% url 'calificaciones_realizadas' %}">Calificaciones</a>
+  </div>
+</li>
+
+    </ul>
+  </div>
+</div>
+
+<!--Script para barra de búsqueda-->
+<script>
+  $(document).ready(function(){
+    $("#myInput").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#myTable tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+</script>
+<!--Script para barra de búsqueda-->
+
+<!-- Datatable-->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.0.3/b-3.0.1/b-html5-3.0.1/date-1.5.2/sl-2.0.0/datatables.min.js"></script>
+
+<!-- Datatable-->
+<link href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.0.3/b-3.0.1/b-html5-3.0.1/date-1.5.2/sl-2.0.0/datatables.min.css" rel="stylesheet">
+
+    <style>
+      .nav-tabs .nav-link.active,
+.nav-tabs .dropdown-toggle.active {
+  color: #bc3de6 !important;
+  background-color: rgba(244, 226, 241, 0.248);
+  font-weight: bold;
+  border-radius: 4px;
+
+}
+
+.dropdown-menu .dropdown-item.active {
+  color: #8f14b8 !important;
+  background-color: rgba(244, 226, 241, 0.248);
+  font-weight: bold;
+  border-radius: 4px;
+  }
+
+  .nav-tabs .nav-link,
+.nav-tabs .dropdown-toggle {
+  color: black !important;  /* Texto negro cuando no está activo */
+}
+
+.nav-tabs .nav-link:hover,
+.nav-tabs .dropdown-toggle:hover {
+  color: #5a5a5a !important; /* Color oscuro al pasar el mouse (opcional) */
+}
+
+
+    </style>

@@ -1,0 +1,61 @@
+
+<div class="modal fade" id="lavadoModal" tabindex="-1" aria-labelledby="lavadoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form id="lavadoForm">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title" id="lavadoModalLabel">Mantenimiento de Sistemas</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Sistema:</label>
+      <select name="sistema" class="form-select" required>
+        <option value="">Seleccione...</option>
+        {% for sistema in sistema %}
+          <option value="{{ sistema.id }}">{{ sistema }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Fecha lavado buzo:</label>
+      <input type="date" name="fecha_lavado_buzo" class="form-control">
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Fecha lavado celda:</label>
+      <input type="date" name="fecha_lavado_celda" class="form-control">
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Fecha test diagnóstico:</label>
+      <input type="date" name="fecha_test_diagnostico" class="form-control">
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Fecha mantenimiento:</label>
+      <input type="date" name="fecha_mantenimiento" class="form-control">
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Fecha calificación:</label>
+      <input type="date" name="fecha_calificacion" class="form-control">
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Observaciones:</label>
+    <textarea name="observaciones" class="form-control"></textarea>
+  </div>
+</div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+          <button type="button" class="btn btn-secondary btn-block" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
