@@ -175,12 +175,13 @@ WSGI_APPLICATION = "MONSTER_APP.wsgi.application"
 #}
 
 #BASE DE DATOS DE POSGRESSQL DE Railway SIN VARIABLE DE ENTORNO (pip install dj-database-url psycopg2-binary)
+
 DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get("DATABASE_URL")
     )
 }
-
+#DATABASE_URL="postgresql://${{PGUSER}}:${{POSTGRES_PASSWORD}}@${{RAILWAY_PRIVATE_DOMAIN}}:5432/${{PGDATABASE}}"
 
 #BASE DE DATOS DE POSGRESSQL DE RENDER SIN VARIABLE DE ENTORNO
 #import dj_database_url
