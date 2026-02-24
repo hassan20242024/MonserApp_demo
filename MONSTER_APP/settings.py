@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-import os
+import os #Para fines de base de datos
+import dj_database_url #Para fines de base de datos
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 #from decouple import config #Variable de entorno
@@ -166,11 +167,18 @@ WSGI_APPLICATION = "MONSTER_APP.wsgi.application"
 
 
 #BASE DE DATOS SQL3 POR DEFECTO
+#DATABASES = {
+    #"default": {
+       # "ENGINE": "django.db.backends.sqlite3",
+       # "NAME": BASE_DIR / "db.sqlite3",
+  #}
+#}
+
+#BASE DE DATOS DE POSGRESSQL DE Railway SIN VARIABLE DE ENTORNO (pip install dj-database-url psycopg2-binary)
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-  }
+    'default': dj_database_url.config(
+        default=os.environ.get("DATABASE_URL")
+    )
 }
 
 
