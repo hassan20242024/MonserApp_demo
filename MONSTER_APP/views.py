@@ -14,7 +14,7 @@ from django.http import JsonResponse
 import calendar
 from collections import defaultdict
 
-@login_required
+
 def inicio(request):
     registro_total_protocolo_metodos = Protocolos.objects.count()
     registro_total_protocolo_proceso = Proceso.objects.count()
