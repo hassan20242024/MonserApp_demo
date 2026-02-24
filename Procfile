@@ -1,0 +1,1 @@
+web: gunicorn MONSTER_APP.wsgi
