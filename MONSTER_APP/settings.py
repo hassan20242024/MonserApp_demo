@@ -32,8 +32,19 @@ SECRET_KEY = "django-insecure-5o95fv@r=-mat=@24fba40ptmt5z%51(-y^$am_-dtl**#73z#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#ALLOWED_HOSTS = ["139.177.204.185"]
-ALLOWED_HOSTS = ["*"] #paraentorno de desarrollo
+# OJO ESTO ES EXCLUSIVO PARA DOMINIO DE ESTE PROYECTO EN RAILWAY (CSRF_TRUSTED_ORIGINS Y ALLOWED_HOSTS)
+CSRF_TRUSTED_ORIGINS = [
+    'https://monserappdemo-production.up.railway.app',
+    'https://*.railway.app' # Esto cubre cualquier subdominio de Railway
+]
+ALLOWED_HOSTS = [
+    'monserappdemo-production.up.railway.app',
+    'localhost',
+    '127.0.0.1',
+    '.railway.app'
+]
+
+#ALLOWED_HOSTS = ["*"] #para entorno de desarrollo
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
